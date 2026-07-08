@@ -1,0 +1,59 @@
+{
+  "timestamp": "2026-03-09 10:34:14",
+  "alert": {
+    "reason": "CPU critical (93.5%)",
+    "conditions": [
+      "cpu_high"
+    ],
+    "active": 1,
+    "max_capacity": 10,
+    "cpu_pct": 93.5,
+    "ram_pct": 33.9,
+    "failed_logins": 35,
+    "rpm": 6,
+    "bandwidth_bytes_s": 1024,
+    "high_latency_clients": [],
+    "timestamp": "2026-03-09 10:34:11"
+  },
+  "agents_used": [
+    "PerformanceAgent"
+  ],
+  "agent_results": [
+    {
+      "agent": "PerformanceAgent",
+      "alert_key": "cpu_high",
+      "alert_reason": "CPU critical (93.5%)",
+      "severity": "High",
+      "root_cause": "CPU at 93.5%. Heavy compute or bulk processing tasks are saturating the processor.",
+      "immediate_action": "Throttle compute-intensive tasks. Queue bulk_process and compute jobs. Check for runaway threads.",
+      "preventive_measures": [
+        "Implement task queuing for heavy compute jobs.",
+        "Add CPU usage limits per client session.",
+        "Offload compute tasks to a background worker process.",
+        "Profile the most CPU-intensive tasks and optimize them."
+      ],
+      "confidence": "Heuristic",
+      "resolved": false,
+      "escalation_needed": true,
+      "timestamp": "2026-03-09 10:34:11"
+    }
+  ],
+  "final_diagnosis": {
+    "primary_agent": "PerformanceAgent",
+    "root_cause": "CPU at 93.5%. Heavy compute or bulk processing tasks are saturating the processor.",
+    "severity": "High",
+    "immediate_action": "Throttle compute-intensive tasks. Queue bulk_process and compute jobs. Check for runaway threads.",
+    "preventive_measures": [
+      "Implement task queuing for heavy compute jobs.",
+      "Add CPU usage limits per client session.",
+      "Offload compute tasks to a background worker process.",
+      "Profile the most CPU-intensive tasks and optimize them."
+    ],
+    "confidence": "Heuristic",
+    "resolved": false,
+    "escalation_needed": true
+  },
+  "resolved": false,
+  "total_agents": 1,
+  "incident_id": 6
+}

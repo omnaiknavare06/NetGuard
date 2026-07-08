@@ -1,0 +1,356 @@
+{
+  "timestamp": "2026-03-09 11:15:31",
+  "alert": {
+    "reason": "CPU critical (93.5%) | High latency clients: cli_uyx7ov0p",
+    "conditions": [
+      "cpu_high",
+      "latency_high"
+    ],
+    "active": 1,
+    "max_capacity": 10,
+    "cpu_pct": 93.5,
+    "ram_pct": 37.5,
+    "failed_logins": 0,
+    "rpm": 27,
+    "bandwidth_bytes_s": 1024,
+    "high_latency_clients": [
+      "cli_uyx7ov0p"
+    ],
+    "suspect_ips": [
+      "127.0.0.1"
+    ],
+    "timestamp": "2026-03-09 11:15:28"
+  },
+  "agents_used": [
+    "PerformanceAgent",
+    "LatencyAgent"
+  ],
+  "agent_results": [
+    {
+      "agent": "PerformanceAgent",
+      "alert_key": "cpu_high",
+      "alert_reason": "CPU critical (93.5%) | Bandwidth spike (9765 KB/s) | High latency clients: cli_uyx7ov0p",
+      "severity": "High",
+      "root_cause": "CPU at 93.5%. Heavy compute or bulk processing tasks are saturating the processor.",
+      "immediate_action": "Throttle compute-intensive tasks. Queue bulk_process and compute jobs. Check for runaway threads.",
+      "preventive_measures": [
+        "Implement task queuing for heavy compute jobs.",
+        "Add CPU usage limits per client session.",
+        "Offload compute tasks to a background worker process.",
+        "Profile the most CPU-intensive tasks and optimize them."
+      ],
+      "confidence": "Heuristic",
+      "resolved": false,
+      "escalation_needed": true,
+      "ai_meta": {
+        "api_key_present": true,
+        "cache_hit": true,
+        "attempted": false,
+        "used": false,
+        "source": "cache",
+        "skip_reason": "cache_ttl_active",
+        "error": ""
+      },
+      "timestamp": "2026-03-09 11:15:10"
+    },
+    {
+      "agent": "LatencyAgent",
+      "alert_key": "latency_high",
+      "alert_reason": "CPU critical (92.0%) | High latency clients: cli_uyx7ov0p",
+      "severity": "Low",
+      "root_cause": "1 client (cli_uyx7ov0p) experiencing high latency. Likely isolated \u2014 heavy task or degraded network.",
+      "immediate_action": "Monitor the specific client. If persistent, ask client to retry with lighter tasks.",
+      "preventive_measures": [
+        "Set server-side timeout limits per task type.",
+        "Add latency-based session prioritization (deprioritize high-latency clients).",
+        "Profile task execution times and set SLO budgets.",
+        "Implement heartbeat timeouts to detect and evict stale sessions."
+      ],
+      "confidence": "Heuristic",
+      "resolved": true,
+      "escalation_needed": false,
+      "ai_meta": {
+        "api_key_present": true,
+        "cache_hit": true,
+        "attempted": false,
+        "used": false,
+        "source": "cache",
+        "skip_reason": "cache_ttl_active",
+        "error": ""
+      },
+      "timestamp": "2026-03-09 11:15:16"
+    }
+  ],
+  "executed_actions": [
+    {
+      "action_type": "throttle_cpu",
+      "description": "CPU throttled \u2014 heavy tasks paused",
+      "detail": "",
+      "agent": "PerformanceAgent",
+      "timestamp": "2026-03-09 11:15:28",
+      "status": "executed",
+      "result": "CPU throttled. Load reduced to 68%."
+    },
+    {
+      "action_type": "throttle_clients",
+      "description": "Degraded sessions put in low-priority mode",
+      "detail": "",
+      "agent": "PerformanceAgent",
+      "timestamp": "2026-03-09 11:15:28",
+      "status": "executed",
+      "result": "Throttled 0 degraded client sessions."
+    },
+    {
+      "action_type": "throttle_clients",
+      "description": "Slow-response clients deprioritized",
+      "detail": "",
+      "agent": "LatencyAgent",
+      "timestamp": "2026-03-09 11:15:28",
+      "status": "executed",
+      "result": "Throttled 0 degraded client sessions."
+    },
+    {
+      "action_type": "alert_cleared",
+      "description": "Latency watchdog reset \u2014 monitoring response times",
+      "detail": "",
+      "agent": "LatencyAgent",
+      "timestamp": "2026-03-09 11:15:28",
+      "status": "executed",
+      "result": "Alert condition resolved. System returning to normal."
+    }
+  ],
+  "command_runs": [
+    {
+      "agent": "PerformanceAgent",
+      "alert_key": "cpu_high",
+      "timestamp": "2026-03-09 11:15:28",
+      "target": "127.0.0.1",
+      "status": "ok",
+      "command": "netstat",
+      "cmd_string": "netstat -an",
+      "output": "Active Connections\n\n  Proto  Local Address          Foreign Address        State\n  TCP    0.0.0.0:7              0.0.0.0:0              LISTENING\n  TCP    0.0.0.0:9              0.0.0.0:0              LISTENING\n  TCP    0.0.0.0:13             0.0.0.0:0              LISTENING\n  TCP    0.0.0.0:17             0.0.0.0:0              LISTENING\n  TCP    0.0.0.0:19             0.0.0.0:0              LISTENING\n  TCP    0.0.0.0:135            0.0.0.0:0              LISTENING\n  TCP    0.0.0.0:445            0.0.0.0:0              LISTENING\n  TCP    0.0.0.0:1801           0.0.0.0:0              LISTENING\n  TCP    0.0.0.0:2103           0.0.0.0:0              LISTENING\n  TCP    0.0.0.0:2105           0.0.0.0:0              LISTENING\n  TCP    0.0.0.0:2107           0.0.0.0:0              LISTENING\n  TCP    0.0.0.0:2869           0.0.0.0:0              LISTENING\n  TCP    0.0.0.0:3307           0.0.0.0:0              LISTENING\n  TCP    0.0.0.0:5000           0.0.0.0:0              LISTENING\n  TCP    0.0.0.0:5040           0.0.0.0:0              LISTENING\n  TCP    0.0.0.0:7250           0.0.0.0:0              LISTENING\n  TCP    0.0.0.0:7393           0.0.0.0:0              LISTENING\n  TCP    0.0.0.0:26769          0.0.0.0:0              LISTENING\n  TCP    0.0.0.0:26770          0.0.0.0:0              LISTENING\n  TCP    0.0.0.0:33060          0.0.0.0:0              LISTENING\n  TCP    0.0.0.0:49664          0.0.0.0:0              LISTENING\n  TCP    0.0.0.0:49665          0.0.0.0:0              LISTENING\n  TCP    0.0.0.0:49666          0.0.0.0:0              LISTENING\n  TCP    0.0.0.0:49667          0.0.0.0:0              LISTENING\n  TCP    0.0.0.0:49668          0.0.0.0:0              LISTENING\n  TCP    0.0.0.0:49670          0.0.0.0:0              LISTENING\n  TCP    0.0.0.0:49678          0.0.0.0:0              LISTENING\n  TCP    0.0.0.0:65001          0.0.0.0:0              LISTENING\n  TCP    10.138.254.37:139      0.0.0.0:0              LISTENING\n  TCP    10.138.254.37:49198    216.239.34.223:443     ESTABLISHED\n  TCP    10.138.254.37:49388    172.64.148.235:443     ESTABLISHED\n  TCP    10.138.254.37:49434    4.213.25.240:443       ESTABLISHED\n  TCP    10.138.254.37:49675    142.250.67.3:443       ESTABLISHED\n  TCP    10.138.254.37:49945    18.66.57.106:443       ESTABLISHED\n  TCP    10.138.254.37:50123    163.70.144.60:443      ESTABLISHED\n  TCP    10.138.254.37:51459    192.178.211.188:5228   ESTABLISHED\n  TCP    10.138.254.37:51650    13.107.226.37:443      TIME_WAIT\n  TCP    10.138.254.37:52270    216.239.38.223:443     ESTABLISHED\n  TCP    10.138.254.37:52479    142.250.67.3:443       ESTABLISHED\n  TCP    10.138.254.37:52552    104.18.32.47:443       TIME_WAIT\n  TCP    10.138.254.37:54296    216.239.38.223:443     ESTABLISHED\n  TCP    10.138.254.37:54316    104.208.16.90:443      TIME_WAIT\n  TCP    10.138.254.37:54388    13.107.213.68:443      TIME_WAIT\n  TCP    10.138.254.37:54709    160.79.104.10:443      TIME_WAIT\n  TCP    10.138.254.37:55125    40.99.9.178:443        TIME_WAIT\n  TCP    10.138.254.37:55191    57.144.243.32:443      ESTABLISHED\n  TCP    10.138.254.37:55257    163.70.144.60:443      CLOSE_WAIT\n  TCP    10.138.254.37:55560    135.171.2.152:443      TIME_WAIT\n  TCP    10.138.254.37:55931    163.70.144.60:443      CLOSE_WAIT\n  TCP    10.138.254.37:56083    23.212.55.35:443       SYN_SENT\n  TCP    10.138.254.37:56240    163.70.144.60:443      ESTABLISHED\n  TCP    10.138.254.37:56404    150.171.27.11:443      TIME_WAIT\n  TCP    10.138.254.37:56585    142.250.206.174:443    ESTABLISHED\n  TCP    10.138.254.37:56729    4.213.25.240:443       ESTABLISHED\n  TCP    10.138.254.37:57085    142.250.71.99:443      TIME_WAIT\n  TCP    10.138.254.37:57288    52.123.128.14:443      ESTABLISHED\n  TCP    10.138.254.37:57848    104.208.16.90:443      TIME_WAIT\n  TCP    10.138.254.37:57857    104.18.32.47:443       TIME_WAIT\n  TCP    10.138.254.37:58848    192.178.211.188:5228   ESTABLISHED\n  TCP    10.138.254.37:58869    18.66.57.106:443       ESTABLISHED\n  TCP    10.138.254.37:59567    216.239.34.223:443     ESTABLISHED\n  TCP    10.138.254.37:59569    20.190.146.32:443      TIME_WAIT\n  TCP    10.138.254.37:59641    142.250.207.170:443    FIN_WAIT_1\n  TCP    10.138.254.37:60441    142.250.206.99:443     FIN_WAIT_1\n  TCP    10.138.254.37:60447    52.98.123.178:443      TIME_WAIT\n  TCP    10.138.254.37:60463    104.208.16.90:443      TIME_WAIT\n  TCP    10.138.254.37:60485    13.107.213.72:443      TIME_WAIT\n  TCP    10.138.254.37:61012    142.250.71.99:443      TIME_WAIT\n  TCP    10.138.254.37:63101    142.250.206.99:443     FIN_WAIT_1\n  TCP    10.138.254.37:63145    142.250.206.174:443    ESTABLISHED\n  TCP    10.138.254.37:63846    150.171.28.11:443      TIME_WAIT\n  TCP    10.138.254.37:64480    160.79.104.10:443      TIME_WAIT\n  TCP    10.138.254.37:64677    18.97.36.54:443        ESTABLISHED\n  TCP    10.138.254.37:64847    57.144.243.32:443      TIME_WAIT\n  TCP    10.138.254.37:64980    57.144.243.32:443      CLOSE_WAIT\n  TCP    127.0.0.1:5000         127.0.0.1:51265        ESTABLISHED\n  TCP    127.0.0.1:5000         127.0.0.1:51718        TIME_WAIT\n  TCP    127.0.0.1:5000         127.0.0.1:59436        ESTABLISHED\n  TCP    127.0.0.1:5000         127.0.0.1:60621        ESTABLISHED\n  TCP    127.0.0.1:5000         127.0.0.1:63850        TIME_WAIT\n  TCP    127.0.0.1:5001         0.0.0.0:0              LISTENING\n  TCP    127.0.0.1:5077         0.0.0.0:0              LISTENING\n  TCP    127.0.0.1:5077         127.0.0.1:50246        ESTABLISHED\n  TCP    127.0.0.1:9222         0.0.0.0:0              LISTENING\n  TCP    127.0.0.1:49185        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:49258        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:49671        127.0.0.1:49672        ESTABLISHED\n  TCP    127.0.0.1:49672        127.0.0.1:49671        ESTABLISHED\n  TCP    127.0.0.1:49673        127.0.0.1:49674        ESTABLISHED\n  TCP    127.0.0.1:49674        127.0.0.1:49673        ESTABLISHED\n  TCP    127.0.0.1:49676        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:49677        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:49721        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:49880        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:50078        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:50180        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:50246        127.0.0.1:5077         ESTABLISHED\n  TCP    127.0.0.1:50661        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:50721        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:50805        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:50833        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:50946        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:50982        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:51265        127.0.0.1:5000         ESTABLISHED\n  TCP    127.0.0.1:51287        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:51290        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:51633        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:52153        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:52422        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:52423        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:52464        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:52646        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:52918        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:52940        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:53171        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:53349        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:53565        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:53823        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:53988        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:54469        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:54520        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:54537        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:54714        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:55086        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:55087        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:55236        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:55410        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:55590        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:55889        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:55970        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:56082        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:56372        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:56652        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:56662        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:56781        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:56892        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:57148        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:57287        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:57348        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:57387        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:57886        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:57931        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:58221        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:58306        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:58321        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:58331        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:58460        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:58512        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:58546        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:58663        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:58695        0.0.0.0:0              LISTENING\n  TCP    127.0.0.1:59087        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:59093        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:59367        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:59429        0.0.0.0:0              LISTENING\n  TCP    127.0.0.1:59436        127.0.0.1:5000         ESTABLISHED\n  TCP    127.0.0.1:59478        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:59496        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:59562        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:59652        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:59992        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:60274        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:60283        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:60621        127.0.0.1:5000         ESTABLISHED\n  TCP    127.0.0.1:61139        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:61306        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:61402        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:61703        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:62482        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:62560        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:62633        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:63076        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:63134        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:63544        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:63609        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:63685        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:63868        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:64003        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:64276        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:64321        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:64578        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:64781        127.0.0.1:5000         TIME_WAIT\n  TCP    192.168.56.1:139       0.0.0.0:0              LISTENING\n  TCP    192.168.137.1:139      0.0.0.0:0              LISTENING\n  TCP    [::]:7                 [::]:0                 LISTENING\n  TCP    [::]:9                 [::]:0                 LISTENING\n  TCP    [::]:13                [::]:0                 LISTENING\n  TCP    [::]:17                [::]:0                 LISTENING\n  TCP    [::]:19                [::]:0                 LISTENING\n  TCP    [::]:135               [::]:0                 LISTENING\n  TCP    [::]:445               [::]:0                 LISTENING\n  TCP    [::]:1801              [::]:0                 LISTENING\n  TCP    [::]:2103              [::]:0                 LISTENING\n  TCP    [::]:2105              [::]:0                 LISTENING\n  TCP    [::]:2107              [::]:0                 LISTENING\n  TCP    [::]:2869              [::]:0                 LISTENING\n  TCP    [::]:3307              [::]:0                 LISTENING\n  TCP    [::]:7250              [::]:0                 LISTENING\n  TCP    [::]:26769             [::]:0                 LISTENING\n  TCP    [::]:26770             [::]:0                 LISTENING\n  TCP    [::]:33060             [::]:0                 LISTENING\n  TCP    [::]:49664             [::]:0                 LISTENING\n  TCP    [::]:49665             [::]:0                 LISTENING\n  TCP    [::]:49666             [::]:0                 LISTENING\n  TCP    [::]:49667             [::]:0                 LISTENING\n  TCP    [::]:49668             [::]:0                 LISTENING\n  TCP    [::]:49670             [::]:0                 LISTENING\n  TCP    [::]:49678             [::]:0                 LISTENING\n  TCP    [::]:65001             [::]:0                 LISTENING\n  TCP    [::1]:49669            [::]:0                 LISTENING\n  TCP    [2409:40c2:105f:11f:98b3:676c:c1bb:91cd]:53824  [2405:200:1602::312c:8213]:80  SYN_SENT\n  TCP    [2409:40c2:105f:11f:98b3:676c:c1bb:91cd]:54538  [2001:4860:4802:36::223]:443  SYN_SENT\n  TCP    [2409:40c2:105f:11f:98b3:676c:c1bb:91cd]:61704  [2001:4860:4802:38::223]:443  SYN_SENT\n  UDP    0.0.0.0:7              *:*                    \n  UDP    0.0.0.0:9              *:*                    \n  UDP    0.0.0.0:13             *:*                    \n  UDP    0.0.0.0:17             *:*                    \n  UDP    0.0.0.0:19             *:*                    \n  UDP    0.0.0.0:123            *:*                    \n  UDP    0.0.0.0:161            *:*                    \n  UDP    0.0.0.0:5050           *:*                    \n  UDP    0.0.0.0:5353           *:*                    \n  UDP    0.0.0.0:5353           *:*                    \n  UDP    0.0.0.0:5353           *:*                    \n  UDP    0.0.0.0:5353           *:*                    \n  UDP    0.0.0.0:5353           *:*                    \n  UDP    0.0.0.0:5353           *:*                    \n  UDP    0.0.0.0:5353           *:*                    \n  UDP    0.0.0.0:5353           *:*                    \n  UDP    0.0.0.0:5353           *:*                    \n  UDP    0.0.0.0:5353           *:*                    \n  UDP    0.0.0.0:5353           *:*                    \n  UDP    0.0.0.0:5353           *:*                    \n  UDP    0.0.0.0:5353           *:*                    \n  UDP    0.0.0.0:5353           *:*                    \n  UDP    0.0.0.0:5353           *:*                    \n  UDP    0.0.0.0:5353           *:*                    \n  UDP    0.0.0.0:5353           *:*                    \n  UDP    0.0.0.0:5353           *:*                    \n  UDP    0.0.0.0:5353           *:*                    \n  UDP    0.0.0.0:5355           *:*                    \n  UDP    0.0.0.0:51638          *:*                    \n  UDP    0.0.0.0:52141          *:*                    \n  UDP    0.0.0.0:56005          *:*                    \n  UDP    0.0.0.0:59531          *:*                    \n  UDP    0.0.0.0:59644          *:*                    \n  UDP    10.138.254.37:137      *:*                    \n  UDP    10.138.254.37:138      *:*                    \n  UDP    10.138.254.37:1900     *:*                    \n  UDP    10.138.254.37:59053    *:*                    \n  UDP    127.0.0.1:1900         *:*                    \n  UDP    127.0.0.1:50389        127.0.0.1:50389        \n  UDP    127.0.0.1:59054        *:*                    \n  UDP    192.168.56.1:137       *:*                    \n  UDP    192.168.56.1:138       *:*                    \n  UDP    192.168.56.1:1900      *:*                    \n  UDP    192.168.56.1:59051     *:*                    \n  UDP    192.168.137.1:67       *:*                    \n  UDP    192.168.137.1:68       *:*                    \n  UDP    192.168.137.1:137      *:*                    \n  UDP    192.168.137.1:138      *:*                    \n  UDP    192.168.137.1:1900     *:*                    \n  UDP    192.168.137.1:59052    *:*                    \n  UDP    [::]:7                 *:*                    \n  UDP    [::]:9                 *:*                    \n  UDP    [::]:13                *:*                    \n  UDP    [::]:17                *:*                    \n  UDP    [::]:19                *:*                    \n  UDP    [::]:123               *:*                    \n  UDP    [::]:161               *:*                    \n  UDP    [::]:5353              *:*                    \n  UDP    [::]:5353              *:*                    \n  UDP    [::]:5353              *:*                    \n  UDP    [::]:5353              *:*                    \n  UDP    [::]:5353              *:*                    \n  UDP    [::]:5353              *:*                    \n  UDP    [::]:5353              *:*                    \n  UDP    [::]:5353              *:*                    \n  UDP    [::]:5353              *:*                    \n  UDP    [::]:5353              *:*                    \n  UDP    [::]:5355              *:*                    \n  UDP    [::]:51638             *:*                    \n  UDP    [::]:52141             *:*                    \n  UDP    [::]:56005             *:*                    \n  UDP    [::]:59531             *:*                    \n  UDP    [::]:59644             *:*                    \n  UDP    [::1]:1900             *:*                    \n  UDP    [::1]:59050            *:*                    \n  UDP    [fe80::31a3:213a:3d83:1343%21]:1900  *:*                    \n  UDP    [fe80::31a3:213a:3d83:1343%21]:59049  *:*                    \n  UDP    [fe80::9ea1:4557:964e:bf80%17]:1900  *:*                    \n  UDP    [fe80::9ea1:4557:964e:bf80%17]:59047  *:*                    \n  UDP    [fe80::fd49:4aff:4f67:797%19]:1900  *:*                    \n  UDP    [fe80::fd49:4aff:4f67:797%19]:59048  *:*",
+      "output_lines": [
+        "Active Connections",
+        "",
+        "  Proto  Local Address          Foreign Address        State",
+        "  TCP    0.0.0.0:7              0.0.0.0:0              LISTENING",
+        "  TCP    0.0.0.0:9              0.0.0.0:0              LISTENING",
+        "  TCP    0.0.0.0:13             0.0.0.0:0              LISTENING",
+        "  TCP    0.0.0.0:17             0.0.0.0:0              LISTENING",
+        "  TCP    0.0.0.0:19             0.0.0.0:0              LISTENING",
+        "  TCP    0.0.0.0:135            0.0.0.0:0              LISTENING",
+        "  TCP    0.0.0.0:445            0.0.0.0:0              LISTENING",
+        "  TCP    0.0.0.0:1801           0.0.0.0:0              LISTENING",
+        "  TCP    0.0.0.0:2103           0.0.0.0:0              LISTENING",
+        "  TCP    0.0.0.0:2105           0.0.0.0:0              LISTENING",
+        "  TCP    0.0.0.0:2107           0.0.0.0:0              LISTENING",
+        "  TCP    0.0.0.0:2869           0.0.0.0:0              LISTENING",
+        "  TCP    0.0.0.0:3307           0.0.0.0:0              LISTENING",
+        "  TCP    0.0.0.0:5000           0.0.0.0:0              LISTENING",
+        "  TCP    0.0.0.0:5040           0.0.0.0:0              LISTENING",
+        "  TCP    0.0.0.0:7250           0.0.0.0:0              LISTENING",
+        "  TCP    0.0.0.0:7393           0.0.0.0:0              LISTENING",
+        "  TCP    0.0.0.0:26769          0.0.0.0:0              LISTENING",
+        "  TCP    0.0.0.0:26770          0.0.0.0:0              LISTENING",
+        "  TCP    0.0.0.0:33060          0.0.0.0:0              LISTENING",
+        "  TCP    0.0.0.0:49664          0.0.0.0:0              LISTENING",
+        "  TCP    0.0.0.0:49665          0.0.0.0:0              LISTENING",
+        "  TCP    0.0.0.0:49666          0.0.0.0:0              LISTENING",
+        "  TCP    0.0.0.0:49667          0.0.0.0:0              LISTENING",
+        "  TCP    0.0.0.0:49668          0.0.0.0:0              LISTENING",
+        "  TCP    0.0.0.0:49670          0.0.0.0:0              LISTENING",
+        "  TCP    0.0.0.0:49678          0.0.0.0:0              LISTENING",
+        "  TCP    0.0.0.0:65001          0.0.0.0:0              LISTENING",
+        "  TCP    10.138.254.37:139      0.0.0.0:0              LISTENING",
+        "  TCP    10.138.254.37:49198    216.239.34.223:443     ESTABLISHED",
+        "  TCP    10.138.254.37:49388    172.64.148.235:443     ESTABLISHED",
+        "  TCP    10.138.254.37:49434    4.213.25.240:443       ESTABLISHED",
+        "  TCP    10.138.254.37:49675    142.250.67.3:443       ESTABLISHED",
+        "  TCP    10.138.254.37:49945    18.66.57.106:443       ESTABLISHED",
+        "  TCP    10.138.254.37:50123    163.70.144.60:443      ESTABLISHED",
+        "  TCP    10.138.254.37:51459    192.178.211.188:5228   ESTABLISHED",
+        "  TCP    10.138.254.37:51650    13.107.226.37:443      TIME_WAIT"
+      ],
+      "output_preview": "Active Connections\n\n  Proto  Local Address          Foreign Address        State\n  TCP    0.0.0.0:7              0.0.0.0:0              LISTENING\n  TCP    0.0.0.0:9              0.0.0.0:0              LISTENING\n  TCP    0.0.0.0:13             0.0.0.0:0              LISTENING"
+    },
+    {
+      "agent": "PerformanceAgent",
+      "alert_key": "cpu_high",
+      "timestamp": "2026-03-09 11:15:28",
+      "target": "127.0.0.1",
+      "status": "ok",
+      "command": "ipconfig",
+      "cmd_string": "ipconfig /all",
+      "output": "Windows IP Configuration\n\n   Host Name . . . . . . . . . . . . : DRAG\n   Primary Dns Suffix  . . . . . . . : \n   Node Type . . . . . . . . . . . . : Hybrid\n   IP Routing Enabled. . . . . . . . : No\n   WINS Proxy Enabled. . . . . . . . : No\n\nEthernet adapter Ethernet:\n\n   Media State . . . . . . . . . . . : Media disconnected\n   Connection-specific DNS Suffix  . : \n   Description . . . . . . . . . . . : Realtek PCIe GbE Family Controller\n   Physical Address. . . . . . . . . : 6C-24-08-26-98-D8\n   DHCP Enabled. . . . . . . . . . . : Yes\n   Autoconfiguration Enabled . . . . : Yes\n\nEthernet adapter Ethernet 3:\n\n   Connection-specific DNS Suffix  . : \n   Description . . . . . . . . . . . : VirtualBox Host-Only Ethernet Adapter\n   Physical Address. . . . . . . . . : 0A-00-27-00-00-11\n   DHCP Enabled. . . . . . . . . . . : No\n   Autoconfiguration Enabled . . . . : Yes\n   Link-local IPv6 Address . . . . . : fe80::9ea1:4557:964e:bf80%17(Preferred) \n   IPv4 Address. . . . . . . . . . . : 192.168.56.1(Preferred) \n   Subnet Mask . . . . . . . . . . . : 255.255.255.0\n   Default Gateway . . . . . . . . . : \n   DHCPv6 IAID . . . . . . . . . . . : 822738983\n   DHCPv6 Client DUID. . . . . . . . : 00-01-00-01-2A-3F-29-8A-6C-24-08-26-98-D8\n   NetBIOS over Tcpip. . . . . . . . : Enabled\n\nWireless LAN adapter Local Area Connection* 3:\n\n   Media State . . . . . . . . . . . : Media disconnected\n   Connection-specific DNS Suffix  . : \n   Description . . . . . . . . . . . : Microsoft Wi-Fi Direct Virtual Adapter #3\n   Physical Address. . . . . . . . . : 80-38-FB-85-30-BE\n   DHCP Enabled. . . . . . . . . . . : Yes\n   Autoconfiguration Enabled . . . . : Yes\n\nWireless LAN adapter Local Area Connection* 4:\n\n   Connection-specific DNS Suffix  . : \n   Description . . . . . . . . . . . : Microsoft Wi-Fi Direct Virtual Adapter #4\n   Physical Address. . . . . . . . . : 82-38-FB-85-30-BD\n   DHCP Enabled. . . . . . . . . . . : No\n   Autoconfiguration Enabled . . . . : Yes\n   Link-local IPv6 Address . . . . . : fe80::fd49:4aff:4f67:797%19(Preferred) \n   IPv4 Address. . . . . . . . . . . : 192.168.137.1(Preferred) \n   Subnet Mask . . . . . . . . . . . : 255.255.255.0\n   Default Gateway . . . . . . . . . : \n   NetBIOS over Tcpip. . . . . . . . : Enabled\n\nWireless LAN adapter Wi-Fi:\n\n   Connection-specific DNS Suffix  . : \n   Description . . . . . . . . . . . : Intel(R) Wireless-AC 9560\n   Physical Address. . . . . . . . . : 80-38-FB-85-30-BD\n   DHCP Enabled. . . . . . . . . . . : Yes\n   Autoconfiguration Enabled . . . . : Yes\n   IPv6 Address. . . . . . . . . . . : 2409:40c2:105f:11f:91e7:1f74:cef0:1f7(Preferred) \n   Temporary IPv6 Address. . . . . . : 2409:40c2:105f:11f:98b3:676c:c1bb:91cd(Preferred) \n   Link-local IPv6 Address . . . . . : fe80::31a3:213a:3d83:1343%21(Preferred) \n   IPv4 Address. . . . . . . . . . . : 10.138.254.37(Preferred) \n   Subnet Mask . . . . . . . . . . . : 255.255.255.0\n   Lease Obtained. . . . . . . . . . : 09 March 2026 10:45:14\n   Lease Expires . . . . . . . . . . : 09 March 2026 12:15:19\n   Default Gateway . . . . . . . . . : fe80::a08d:e1ff:fe0a:aa43%21\n                                       10.138.254.34\n   DHCP Server . . . . . . . . . . . : 10.138.254.34\n   DHCPv6 IAID . . . . . . . . . . . : 176175355\n   DHCPv6 Client DUID. . . . . . . . : 00-01-00-01-2A-3F-29-8A-6C-24-08-26-98-D8\n   DNS Servers . . . . . . . . . . . : 10.138.254.34\n                                       2409:40c2:105f:11f::c7\n   NetBIOS over Tcpip. . . . . . . . : Enabled",
+      "output_lines": [
+        "Windows IP Configuration",
+        "",
+        "   Host Name . . . . . . . . . . . . : DRAG",
+        "   Primary Dns Suffix  . . . . . . . : ",
+        "   Node Type . . . . . . . . . . . . : Hybrid",
+        "   IP Routing Enabled. . . . . . . . : No",
+        "   WINS Proxy Enabled. . . . . . . . : No",
+        "",
+        "Ethernet adapter Ethernet:",
+        "",
+        "   Media State . . . . . . . . . . . : Media disconnected",
+        "   Connection-specific DNS Suffix  . : ",
+        "   Description . . . . . . . . . . . : Realtek PCIe GbE Family Controller",
+        "   Physical Address. . . . . . . . . : 6C-24-08-26-98-D8",
+        "   DHCP Enabled. . . . . . . . . . . : Yes",
+        "   Autoconfiguration Enabled . . . . : Yes",
+        "",
+        "Ethernet adapter Ethernet 3:",
+        "",
+        "   Connection-specific DNS Suffix  . : ",
+        "   Description . . . . . . . . . . . : VirtualBox Host-Only Ethernet Adapter",
+        "   Physical Address. . . . . . . . . : 0A-00-27-00-00-11",
+        "   DHCP Enabled. . . . . . . . . . . : No",
+        "   Autoconfiguration Enabled . . . . : Yes",
+        "   Link-local IPv6 Address . . . . . : fe80::9ea1:4557:964e:bf80%17(Preferred) ",
+        "   IPv4 Address. . . . . . . . . . . : 192.168.56.1(Preferred) ",
+        "   Subnet Mask . . . . . . . . . . . : 255.255.255.0",
+        "   Default Gateway . . . . . . . . . : ",
+        "   DHCPv6 IAID . . . . . . . . . . . : 822738983",
+        "   DHCPv6 Client DUID. . . . . . . . : 00-01-00-01-2A-3F-29-8A-6C-24-08-26-98-D8",
+        "   NetBIOS over Tcpip. . . . . . . . : Enabled",
+        "",
+        "Wireless LAN adapter Local Area Connection* 3:",
+        "",
+        "   Media State . . . . . . . . . . . : Media disconnected",
+        "   Connection-specific DNS Suffix  . : ",
+        "   Description . . . . . . . . . . . : Microsoft Wi-Fi Direct Virtual Adapter #3",
+        "   Physical Address. . . . . . . . . : 80-38-FB-85-30-BE",
+        "   DHCP Enabled. . . . . . . . . . . : Yes",
+        "   Autoconfiguration Enabled . . . . : Yes"
+      ],
+      "output_preview": "Windows IP Configuration\n\n   Host Name . . . . . . . . . . . . : DRAG\n   Primary Dns Suffix  . . . . . . . : \n   Node Type . . . . . . . . . . . . : Hybrid\n   IP Routing Enabled. . . . . . . . : No"
+    },
+    {
+      "agent": "LatencyAgent",
+      "alert_key": "latency_high",
+      "timestamp": "2026-03-09 11:15:31",
+      "target": "127.0.0.1",
+      "status": "ok",
+      "command": "ping",
+      "cmd_string": "ping -n 4 127.0.0.1",
+      "output": "Pinging 127.0.0.1 with 32 bytes of data:\nReply from 127.0.0.1: bytes=32 time<1ms TTL=128\nReply from 127.0.0.1: bytes=32 time<1ms TTL=128\nReply from 127.0.0.1: bytes=32 time<1ms TTL=128\nReply from 127.0.0.1: bytes=32 time<1ms TTL=128\n\nPing statistics for 127.0.0.1:\n    Packets: Sent = 4, Received = 4, Lost = 0 (0% loss),\nApproximate round trip times in milli-seconds:\n    Minimum = 0ms, Maximum = 0ms, Average = 0ms",
+      "output_lines": [
+        "Pinging 127.0.0.1 with 32 bytes of data:",
+        "Reply from 127.0.0.1: bytes=32 time<1ms TTL=128",
+        "Reply from 127.0.0.1: bytes=32 time<1ms TTL=128",
+        "Reply from 127.0.0.1: bytes=32 time<1ms TTL=128",
+        "Reply from 127.0.0.1: bytes=32 time<1ms TTL=128",
+        "",
+        "Ping statistics for 127.0.0.1:",
+        "    Packets: Sent = 4, Received = 4, Lost = 0 (0% loss),",
+        "Approximate round trip times in milli-seconds:",
+        "    Minimum = 0ms, Maximum = 0ms, Average = 0ms"
+      ],
+      "output_preview": "Pinging 127.0.0.1 with 32 bytes of data:\nReply from 127.0.0.1: bytes=32 time<1ms TTL=128\nReply from 127.0.0.1: bytes=32 time<1ms TTL=128\nReply from 127.0.0.1: bytes=32 time<1ms TTL=128\nReply from 127.0.0.1: bytes=32 time<1ms TTL=128\n"
+    },
+    {
+      "agent": "LatencyAgent",
+      "alert_key": "latency_high",
+      "timestamp": "2026-03-09 11:15:31",
+      "target": "127.0.0.1",
+      "status": "ok",
+      "command": "traceroute",
+      "cmd_string": "tracert -h 10 127.0.0.1",
+      "output": "Tracing route to localhost.emudhra.com [127.0.0.1]\nover a maximum of 10 hops:\n\n  1    <1 ms    <1 ms    <1 ms  localhost.emudhra.com [127.0.0.1] \n\nTrace complete.",
+      "output_lines": [
+        "Tracing route to localhost.emudhra.com [127.0.0.1]",
+        "over a maximum of 10 hops:",
+        "",
+        "  1    <1 ms    <1 ms    <1 ms  localhost.emudhra.com [127.0.0.1] ",
+        "",
+        "Trace complete."
+      ],
+      "output_preview": "Tracing route to localhost.emudhra.com [127.0.0.1]\nover a maximum of 10 hops:\n\n  1    <1 ms    <1 ms    <1 ms  localhost.emudhra.com [127.0.0.1] \n\nTrace complete."
+    }
+  ],
+  "timeline": [
+    {
+      "step": "alert_detected",
+      "status": "ok",
+      "detail": "Monitor raised conditions: cpu_high, latency_high",
+      "timestamp": "11:15:28"
+    },
+    {
+      "step": "agent_started",
+      "status": "running",
+      "detail": "PerformanceAgent started for cpu_high",
+      "timestamp": "11:15:28"
+    },
+    {
+      "step": "agent_result",
+      "status": "ok",
+      "detail": "PerformanceAgent -> High (Heuristic)",
+      "timestamp": "11:15:28"
+    },
+    {
+      "step": "actions_executed",
+      "status": "ok",
+      "detail": "2 action(s) executed for cpu_high",
+      "timestamp": "11:15:28"
+    },
+    {
+      "step": "diagnostics_executed",
+      "status": "ok",
+      "detail": "2 diagnostic command(s) executed for cpu_high",
+      "timestamp": "11:15:28"
+    },
+    {
+      "step": "agent_started",
+      "status": "running",
+      "detail": "LatencyAgent started for latency_high",
+      "timestamp": "11:15:28"
+    },
+    {
+      "step": "agent_result",
+      "status": "ok",
+      "detail": "LatencyAgent -> Low (Heuristic)",
+      "timestamp": "11:15:28"
+    },
+    {
+      "step": "actions_executed",
+      "status": "ok",
+      "detail": "2 action(s) executed for latency_high",
+      "timestamp": "11:15:28"
+    },
+    {
+      "step": "diagnostics_executed",
+      "status": "ok",
+      "detail": "2 diagnostic command(s) executed for latency_high",
+      "timestamp": "11:15:31"
+    }
+  ],
+  "ai_summary": {
+    "gemini_used": 0,
+    "heuristic_only": 2
+  },
+  "final_diagnosis": {
+    "primary_agent": "PerformanceAgent",
+    "root_cause": "CPU at 93.5%. Heavy compute or bulk processing tasks are saturating the processor.",
+    "severity": "High",
+    "immediate_action": "Throttle compute-intensive tasks. Queue bulk_process and compute jobs. Check for runaway threads.",
+    "preventive_measures": [
+      "Implement task queuing for heavy compute jobs.",
+      "Add CPU usage limits per client session.",
+      "Offload compute tasks to a background worker process.",
+      "Profile the most CPU-intensive tasks and optimize them.",
+      "Set server-side timeout limits per task type.",
+      "Add latency-based session prioritization (deprioritize high-latency clients).",
+      "Profile task execution times and set SLO budgets.",
+      "Implement heartbeat timeouts to detect and evict stale sessions."
+    ],
+    "confidence": "Heuristic",
+    "resolved": false,
+    "escalation_needed": true
+  },
+  "resolved": false,
+  "total_agents": 2,
+  "total_actions": 4,
+  "total_commands": 4,
+  "incident_id": 5
+}

@@ -1,0 +1,213 @@
+{
+  "timestamp": "2026-03-09 12:01:10",
+  "alert": {
+    "reason": "Request rate spike (32 RPM)",
+    "conditions": [
+      "rpm_high"
+    ],
+    "active": 1,
+    "max_capacity": 7,
+    "cpu_pct": 9.8,
+    "ram_pct": 20.4,
+    "failed_logins": 0,
+    "rpm": 32,
+    "bandwidth_bytes_s": 0,
+    "high_latency_clients": [],
+    "suspect_ips": [
+      "127.0.0.1"
+    ],
+    "timestamp": "2026-03-09 12:01:09"
+  },
+  "agents_used": [
+    "PerformanceAgent"
+  ],
+  "agent_results": [
+    {
+      "agent": "PerformanceAgent",
+      "alert_key": "rpm_high",
+      "alert_reason": "Request rate spike (36 RPM)",
+      "severity": "Medium",
+      "root_cause": "Request rate at 36 RPM. Possible bot traffic or rapid client cycling.",
+      "immediate_action": "Enable request rate limiting per client IP. Check for clients in retry loops.",
+      "preventive_measures": [
+        "Implement per-client RPM caps.",
+        "Add exponential backoff in client error handling.",
+        "Use a CDN or reverse proxy to absorb traffic spikes."
+      ],
+      "confidence": "Heuristic",
+      "resolved": false,
+      "escalation_needed": true,
+      "ai_meta": {
+        "api_key_present": true,
+        "cache_hit": true,
+        "attempted": true,
+        "used": false,
+        "source": "cache",
+        "skip_reason": "cache_ttl_active",
+        "error": "HTTP Error 404: Not Found"
+      },
+      "timestamp": "2026-03-09 12:00:51"
+    }
+  ],
+  "executed_actions": [
+    {
+      "action_type": "throttle_clients",
+      "description": "Rate limiter activated on burst-traffic clients",
+      "detail": "",
+      "agent": "PerformanceAgent",
+      "timestamp": "2026-03-09 12:01:09",
+      "status": "executed",
+      "result": "Throttled 0 degraded client sessions."
+    }
+  ],
+  "command_runs": [
+    {
+      "agent": "PerformanceAgent",
+      "alert_key": "rpm_high",
+      "timestamp": "2026-03-09 12:01:09",
+      "target": "127.0.0.1",
+      "status": "ok",
+      "command": "netstat",
+      "cmd_string": "netstat -an",
+      "output": "Active Connections\n\n  Proto  Local Address          Foreign Address        State\n  TCP    0.0.0.0:7              0.0.0.0:0              LISTENING\n  TCP    0.0.0.0:9              0.0.0.0:0              LISTENING\n  TCP    0.0.0.0:13             0.0.0.0:0              LISTENING\n  TCP    0.0.0.0:17             0.0.0.0:0              LISTENING\n  TCP    0.0.0.0:19             0.0.0.0:0              LISTENING\n  TCP    0.0.0.0:135            0.0.0.0:0              LISTENING\n  TCP    0.0.0.0:445            0.0.0.0:0              LISTENING\n  TCP    0.0.0.0:1801           0.0.0.0:0              LISTENING\n  TCP    0.0.0.0:2103           0.0.0.0:0              LISTENING\n  TCP    0.0.0.0:2105           0.0.0.0:0              LISTENING\n  TCP    0.0.0.0:2107           0.0.0.0:0              LISTENING\n  TCP    0.0.0.0:2869           0.0.0.0:0              LISTENING\n  TCP    0.0.0.0:3307           0.0.0.0:0              LISTENING\n  TCP    0.0.0.0:5000           0.0.0.0:0              LISTENING\n  TCP    0.0.0.0:5000           0.0.0.0:0              LISTENING\n  TCP    0.0.0.0:5040           0.0.0.0:0              LISTENING\n  TCP    0.0.0.0:7250           0.0.0.0:0              LISTENING\n  TCP    0.0.0.0:7393           0.0.0.0:0              LISTENING\n  TCP    0.0.0.0:26769          0.0.0.0:0              LISTENING\n  TCP    0.0.0.0:26770          0.0.0.0:0              LISTENING\n  TCP    0.0.0.0:33060          0.0.0.0:0              LISTENING\n  TCP    0.0.0.0:49664          0.0.0.0:0              LISTENING\n  TCP    0.0.0.0:49665          0.0.0.0:0              LISTENING\n  TCP    0.0.0.0:49666          0.0.0.0:0              LISTENING\n  TCP    0.0.0.0:49667          0.0.0.0:0              LISTENING\n  TCP    0.0.0.0:49668          0.0.0.0:0              LISTENING\n  TCP    0.0.0.0:49670          0.0.0.0:0              LISTENING\n  TCP    0.0.0.0:49678          0.0.0.0:0              LISTENING\n  TCP    0.0.0.0:65001          0.0.0.0:0              LISTENING\n  TCP    10.138.254.37:139      0.0.0.0:0              LISTENING\n  TCP    10.138.254.37:52315    74.179.71.194:443      ESTABLISHED\n  TCP    10.138.254.37:63826    18.97.36.54:443        ESTABLISHED\n  TCP    10.138.254.37:64254    172.253.118.188:5228   ESTABLISHED\n  TCP    127.0.0.1:5000         127.0.0.1:50250        ESTABLISHED\n  TCP    127.0.0.1:5000         127.0.0.1:59036        TIME_WAIT\n  TCP    127.0.0.1:5001         0.0.0.0:0              LISTENING\n  TCP    127.0.0.1:5077         0.0.0.0:0              LISTENING\n  TCP    127.0.0.1:5077         127.0.0.1:58651        ESTABLISHED\n  TCP    127.0.0.1:49196        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:49339        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:49399        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:49671        127.0.0.1:49672        ESTABLISHED\n  TCP    127.0.0.1:49672        127.0.0.1:49671        ESTABLISHED\n  TCP    127.0.0.1:49673        127.0.0.1:49674        ESTABLISHED\n  TCP    127.0.0.1:49674        127.0.0.1:49673        ESTABLISHED\n  TCP    127.0.0.1:49675        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:49676        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:49677        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:49679        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:49686        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:49825        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:49891        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:49898        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:49901        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:49966        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:50060        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:50101        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:50158        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:50244        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:50250        127.0.0.1:5000         ESTABLISHED\n  TCP    127.0.0.1:50276        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:50415        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:50538        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:51094        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:51348        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:51358        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:51417        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:51450        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:51555        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:51579        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:51605        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:51859        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:52580        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:53161        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:53218        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:53502        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:53581        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:53674        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:53743        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:53765        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:53768        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:53799        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:53842        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:54000        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:54262        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:54384        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:54386        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:54454        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:54494        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:54763        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:54798        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:54824        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:55052        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:55216        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:55225        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:55398        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:55716        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:55760        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:55929        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:56092        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:56222        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:56289        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:56398        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:56618        127.0.0.1:5077         TIME_WAIT\n  TCP    127.0.0.1:56690        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:56713        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:56735        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:57196        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:57338        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:57480        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:57581        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:57660        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:57827        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:57878        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:57914        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:58010        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:58164        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:58171        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:58651        127.0.0.1:5077         ESTABLISHED\n  TCP    127.0.0.1:58695        0.0.0.0:0              LISTENING\n  TCP    127.0.0.1:58766        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:58972        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:59118        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:59134        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:59217        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:59355        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:59429        0.0.0.0:0              LISTENING\n  TCP    127.0.0.1:59460        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:59494        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:59541        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:59626        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:59737        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:59814        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:59952        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:60286        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:60889        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:61207        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:61270        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:61284        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:61422        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:61522        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:61530        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:61618        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:61788        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:61909        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:62059        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:62114        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:62221        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:62321        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:62406        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:62706        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:62987        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:63044        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:63046        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:63375        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:63427        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:63579        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:63652        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:63803        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:63845        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:63877        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:63936        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:64176        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:64399        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:64414        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:64447        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:64459        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:64563        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:64594        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:64630        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:64896        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:64902        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:65070        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:65231        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:65247        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:65362        127.0.0.1:5000         TIME_WAIT\n  TCP    192.168.56.1:139       0.0.0.0:0              LISTENING\n  TCP    192.168.137.1:139      0.0.0.0:0              LISTENING\n  TCP    [::]:7                 [::]:0                 LISTENING\n  TCP    [::]:9                 [::]:0                 LISTENING\n  TCP    [::]:13                [::]:0                 LISTENING\n  TCP    [::]:17                [::]:0                 LISTENING\n  TCP    [::]:19                [::]:0                 LISTENING\n  TCP    [::]:135               [::]:0                 LISTENING\n  TCP    [::]:445               [::]:0                 LISTENING\n  TCP    [::]:1801              [::]:0                 LISTENING\n  TCP    [::]:2103              [::]:0                 LISTENING\n  TCP    [::]:2105              [::]:0                 LISTENING\n  TCP    [::]:2107              [::]:0                 LISTENING\n  TCP    [::]:2869              [::]:0                 LISTENING\n  TCP    [::]:3307              [::]:0                 LISTENING\n  TCP    [::]:7250              [::]:0                 LISTENING\n  TCP    [::]:26769             [::]:0                 LISTENING\n  TCP    [::]:26770             [::]:0                 LISTENING\n  TCP    [::]:33060             [::]:0                 LISTENING\n  TCP    [::]:49664             [::]:0                 LISTENING\n  TCP    [::]:49665             [::]:0                 LISTENING\n  TCP    [::]:49666             [::]:0                 LISTENING\n  TCP    [::]:49667             [::]:0                 LISTENING\n  TCP    [::]:49668             [::]:0                 LISTENING\n  TCP    [::]:49670             [::]:0                 LISTENING\n  TCP    [::]:49678             [::]:0                 LISTENING\n  TCP    [::]:65001             [::]:0                 LISTENING\n  TCP    [::1]:49669            [::]:0                 LISTENING\n  TCP    [2409:40c2:1025:f210:99a5:ac4b:5878:82ab]:51787  [2606:4700:8d71:d8b7:9ad7:4ba:ccf5:ac50]:443  ESTABLISHED\n  TCP    [2409:40c2:1025:f210:99a5:ac4b:5878:82ab]:53262  [2001:4860:4802:36::223]:443  ESTABLISHED\n  TCP    [2409:40c2:1025:f210:99a5:ac4b:5878:82ab]:54211  [2603:1040:a06:6::1]:443  ESTABLISHED\n  TCP    [2409:40c2:1025:f210:99a5:ac4b:5878:82ab]:54212  [2603:1040:a06:6::1]:443  ESTABLISHED\n  TCP    [2409:40c2:1025:f210:99a5:ac4b:5878:82ab]:62387  [2620:1ec:46::72]:443  ESTABLISHED\n  UDP    0.0.0.0:7              *:*                    \n  UDP    0.0.0.0:9              *:*                    \n  UDP    0.0.0.0:13             *:*                    \n  UDP    0.0.0.0:17             *:*                    \n  UDP    0.0.0.0:19             *:*                    \n  UDP    0.0.0.0:123            *:*                    \n  UDP    0.0.0.0:161            *:*                    \n  UDP    0.0.0.0:5050           *:*                    \n  UDP    0.0.0.0:5353           *:*                    \n  UDP    0.0.0.0:5353           *:*                    \n  UDP    0.0.0.0:5353           *:*                    \n  UDP    0.0.0.0:5353           *:*                    \n  UDP    0.0.0.0:5353           *:*                    \n  UDP    0.0.0.0:5353           *:*                    \n  UDP    0.0.0.0:5353           *:*                    \n  UDP    0.0.0.0:5353           *:*                    \n  UDP    0.0.0.0:5353           *:*                    \n  UDP    0.0.0.0:5353           *:*                    \n  UDP    0.0.0.0:5353           *:*                    \n  UDP    0.0.0.0:5353           *:*                    \n  UDP    0.0.0.0:5353           *:*                    \n  UDP    0.0.0.0:5355           *:*                    \n  UDP    0.0.0.0:59178          0.0.32.4:443           \n  UDP    0.0.0.0:61148          0.0.2.35:443           \n  UDP    0.0.0.0:63339          *:*                    \n  UDP    0.0.0.0:64989          *:*                    \n  UDP    10.138.254.37:137      *:*                    \n  UDP    10.138.254.37:138      *:*                    \n  UDP    10.138.254.37:1900     *:*                    \n  UDP    10.138.254.37:60423    *:*                    \n  UDP    127.0.0.1:1900         *:*                    \n  UDP    127.0.0.1:50389        127.0.0.1:50389        \n  UDP    127.0.0.1:60424        *:*                    \n  UDP    192.168.56.1:137       *:*                    \n  UDP    192.168.56.1:138       *:*                    \n  UDP    192.168.56.1:1900      *:*                    \n  UDP    192.168.56.1:60421     *:*                    \n  UDP    192.168.137.1:67       *:*                    \n  UDP    192.168.137.1:68       *:*                    \n  UDP    192.168.137.1:137      *:*                    \n  UDP    192.168.137.1:138      *:*                    \n  UDP    192.168.137.1:1900     *:*                    \n  UDP    192.168.137.1:60422    *:*                    \n  UDP    [::]:7                 *:*                    \n  UDP    [::]:9                 *:*                    \n  UDP    [::]:13                *:*                    \n  UDP    [::]:17                *:*                    \n  UDP    [::]:19                *:*                    \n  UDP    [::]:123               *:*                    \n  UDP    [::]:161               *:*                    \n  UDP    [::]:5353              *:*                    \n  UDP    [::]:5353              *:*                    \n  UDP    [::]:5353              *:*                    \n  UDP    [::]:5353              *:*                    \n  UDP    [::]:5353              *:*                    \n  UDP    [::]:5353              *:*                    \n  UDP    [::]:5353              *:*                    \n  UDP    [::]:5355              *:*                    \n  UDP    [::]:59178             [2404:6800:4009:80a::2004]:443  \n  UDP    [::]:61148             [2001:4860:4802:38::223]:443  \n  UDP    [::]:63339             *:*                    \n  UDP    [::]:64989             *:*                    \n  UDP    [::1]:1900             *:*                    \n  UDP    [::1]:60420            *:*                    \n  UDP    [fe80::31a3:213a:3d83:1343%21]:1900  *:*                    \n  UDP    [fe80::31a3:213a:3d83:1343%21]:60419  *:*                    \n  UDP    [fe80::9ea1:4557:964e:bf80%17]:1900  *:*                    \n  UDP    [fe80::9ea1:4557:964e:bf80%17]:60417  *:*                    \n  UDP    [fe80::fd49:4aff:4f67:797%19]:1900  *:*                    \n  UDP    [fe80::fd49:4aff:4f67:797%19]:60418  *:*",
+      "output_lines": [
+        "Active Connections",
+        "",
+        "  Proto  Local Address          Foreign Address        State",
+        "  TCP    0.0.0.0:7              0.0.0.0:0              LISTENING",
+        "  TCP    0.0.0.0:9              0.0.0.0:0              LISTENING",
+        "  TCP    0.0.0.0:13             0.0.0.0:0              LISTENING",
+        "  TCP    0.0.0.0:17             0.0.0.0:0              LISTENING",
+        "  TCP    0.0.0.0:19             0.0.0.0:0              LISTENING",
+        "  TCP    0.0.0.0:135            0.0.0.0:0              LISTENING",
+        "  TCP    0.0.0.0:445            0.0.0.0:0              LISTENING",
+        "  TCP    0.0.0.0:1801           0.0.0.0:0              LISTENING",
+        "  TCP    0.0.0.0:2103           0.0.0.0:0              LISTENING",
+        "  TCP    0.0.0.0:2105           0.0.0.0:0              LISTENING",
+        "  TCP    0.0.0.0:2107           0.0.0.0:0              LISTENING",
+        "  TCP    0.0.0.0:2869           0.0.0.0:0              LISTENING",
+        "  TCP    0.0.0.0:3307           0.0.0.0:0              LISTENING",
+        "  TCP    0.0.0.0:5000           0.0.0.0:0              LISTENING",
+        "  TCP    0.0.0.0:5000           0.0.0.0:0              LISTENING",
+        "  TCP    0.0.0.0:5040           0.0.0.0:0              LISTENING",
+        "  TCP    0.0.0.0:7250           0.0.0.0:0              LISTENING",
+        "  TCP    0.0.0.0:7393           0.0.0.0:0              LISTENING",
+        "  TCP    0.0.0.0:26769          0.0.0.0:0              LISTENING",
+        "  TCP    0.0.0.0:26770          0.0.0.0:0              LISTENING",
+        "  TCP    0.0.0.0:33060          0.0.0.0:0              LISTENING",
+        "  TCP    0.0.0.0:49664          0.0.0.0:0              LISTENING",
+        "  TCP    0.0.0.0:49665          0.0.0.0:0              LISTENING",
+        "  TCP    0.0.0.0:49666          0.0.0.0:0              LISTENING",
+        "  TCP    0.0.0.0:49667          0.0.0.0:0              LISTENING",
+        "  TCP    0.0.0.0:49668          0.0.0.0:0              LISTENING",
+        "  TCP    0.0.0.0:49670          0.0.0.0:0              LISTENING",
+        "  TCP    0.0.0.0:49678          0.0.0.0:0              LISTENING",
+        "  TCP    0.0.0.0:65001          0.0.0.0:0              LISTENING",
+        "  TCP    10.138.254.37:139      0.0.0.0:0              LISTENING",
+        "  TCP    10.138.254.37:52315    74.179.71.194:443      ESTABLISHED",
+        "  TCP    10.138.254.37:63826    18.97.36.54:443        ESTABLISHED",
+        "  TCP    10.138.254.37:64254    172.253.118.188:5228   ESTABLISHED",
+        "  TCP    127.0.0.1:5000         127.0.0.1:50250        ESTABLISHED",
+        "  TCP    127.0.0.1:5000         127.0.0.1:59036        TIME_WAIT",
+        "  TCP    127.0.0.1:5001         0.0.0.0:0              LISTENING",
+        "  TCP    127.0.0.1:5077         0.0.0.0:0              LISTENING"
+      ],
+      "output_preview": "Active Connections\n\n  Proto  Local Address          Foreign Address        State\n  TCP    0.0.0.0:7              0.0.0.0:0              LISTENING\n  TCP    0.0.0.0:9              0.0.0.0:0              LISTENING\n  TCP    0.0.0.0:13             0.0.0.0:0              LISTENING"
+    },
+    {
+      "agent": "PerformanceAgent",
+      "alert_key": "rpm_high",
+      "timestamp": "2026-03-09 12:01:10",
+      "target": "127.0.0.1",
+      "status": "ok",
+      "command": "arp",
+      "cmd_string": "arp -a",
+      "output": "Interface: 192.168.56.1 --- 0x11\n  Internet Address      Physical Address      Type\n  192.168.56.255        ff-ff-ff-ff-ff-ff     static    \n  224.0.0.22            01-00-5e-00-00-16     static    \n  224.0.0.251           01-00-5e-00-00-fb     static    \n  224.0.0.252           01-00-5e-00-00-fc     static    \n  239.255.255.250       01-00-5e-7f-ff-fa     static    \n  255.255.255.255       ff-ff-ff-ff-ff-ff     static    \n\nInterface: 192.168.137.1 --- 0x13\n  Internet Address      Physical Address      Type\n  192.168.137.255       ff-ff-ff-ff-ff-ff     static    \n  224.0.0.22            01-00-5e-00-00-16     static    \n  224.0.0.251           01-00-5e-00-00-fb     static    \n  224.0.0.252           01-00-5e-00-00-fc     static    \n  239.255.255.250       01-00-5e-7f-ff-fa     static    \n  255.255.255.255       ff-ff-ff-ff-ff-ff     static    \n\nInterface: 10.138.254.37 --- 0x15\n  Internet Address      Physical Address      Type\n  10.138.254.34         a2-8d-e1-0a-aa-43     dynamic   \n  10.138.254.255        ff-ff-ff-ff-ff-ff     static    \n  224.0.0.22            01-00-5e-00-00-16     static    \n  224.0.0.251           01-00-5e-00-00-fb     static    \n  224.0.0.252           01-00-5e-00-00-fc     static    \n  239.255.255.250       01-00-5e-7f-ff-fa     static    \n  255.255.255.255       ff-ff-ff-ff-ff-ff     static",
+      "output_lines": [
+        "Interface: 192.168.56.1 --- 0x11",
+        "  Internet Address      Physical Address      Type",
+        "  192.168.56.255        ff-ff-ff-ff-ff-ff     static    ",
+        "  224.0.0.22            01-00-5e-00-00-16     static    ",
+        "  224.0.0.251           01-00-5e-00-00-fb     static    ",
+        "  224.0.0.252           01-00-5e-00-00-fc     static    ",
+        "  239.255.255.250       01-00-5e-7f-ff-fa     static    ",
+        "  255.255.255.255       ff-ff-ff-ff-ff-ff     static    ",
+        "",
+        "Interface: 192.168.137.1 --- 0x13",
+        "  Internet Address      Physical Address      Type",
+        "  192.168.137.255       ff-ff-ff-ff-ff-ff     static    ",
+        "  224.0.0.22            01-00-5e-00-00-16     static    ",
+        "  224.0.0.251           01-00-5e-00-00-fb     static    ",
+        "  224.0.0.252           01-00-5e-00-00-fc     static    ",
+        "  239.255.255.250       01-00-5e-7f-ff-fa     static    ",
+        "  255.255.255.255       ff-ff-ff-ff-ff-ff     static    ",
+        "",
+        "Interface: 10.138.254.37 --- 0x15",
+        "  Internet Address      Physical Address      Type",
+        "  10.138.254.34         a2-8d-e1-0a-aa-43     dynamic   ",
+        "  10.138.254.255        ff-ff-ff-ff-ff-ff     static    ",
+        "  224.0.0.22            01-00-5e-00-00-16     static    ",
+        "  224.0.0.251           01-00-5e-00-00-fb     static    ",
+        "  224.0.0.252           01-00-5e-00-00-fc     static    ",
+        "  239.255.255.250       01-00-5e-7f-ff-fa     static    ",
+        "  255.255.255.255       ff-ff-ff-ff-ff-ff     static"
+      ],
+      "output_preview": "Interface: 192.168.56.1 --- 0x11\n  Internet Address      Physical Address      Type\n  192.168.56.255        ff-ff-ff-ff-ff-ff     static    \n  224.0.0.22            01-00-5e-00-00-16     static    \n  224.0.0.251           01-00-5e-00-00-fb     static    \n  224.0.0.252           01-00-5e-00-00-fc     static    "
+    }
+  ],
+  "timeline": [
+    {
+      "step": "alert_detected",
+      "status": "ok",
+      "detail": "Monitor raised conditions: rpm_high",
+      "timestamp": "12:01:09"
+    },
+    {
+      "step": "agent_started",
+      "status": "running",
+      "detail": "PerformanceAgent started for rpm_high",
+      "timestamp": "12:01:09"
+    },
+    {
+      "step": "agent_result",
+      "status": "ok",
+      "detail": "PerformanceAgent -> Medium (Heuristic)",
+      "timestamp": "12:01:09"
+    },
+    {
+      "step": "actions_executed",
+      "status": "ok",
+      "detail": "1 action(s) executed for rpm_high",
+      "timestamp": "12:01:09"
+    },
+    {
+      "step": "diagnostics_executed",
+      "status": "ok",
+      "detail": "2 diagnostic command(s) executed for rpm_high",
+      "timestamp": "12:01:10"
+    }
+  ],
+  "ai_summary": {
+    "gemini_used": 0,
+    "heuristic_only": 1
+  },
+  "final_diagnosis": {
+    "primary_agent": "PerformanceAgent",
+    "root_cause": "Request rate at 36 RPM. Possible bot traffic or rapid client cycling.",
+    "severity": "Medium",
+    "immediate_action": "Enable request rate limiting per client IP. Check for clients in retry loops.",
+    "preventive_measures": [
+      "Implement per-client RPM caps.",
+      "Add exponential backoff in client error handling.",
+      "Use a CDN or reverse proxy to absorb traffic spikes."
+    ],
+    "confidence": "Heuristic",
+    "resolved": false,
+    "escalation_needed": true
+  },
+  "resolved": false,
+  "total_agents": 1,
+  "total_actions": 1,
+  "total_commands": 2,
+  "incident_id": 43
+}

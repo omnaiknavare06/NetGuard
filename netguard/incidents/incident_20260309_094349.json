@@ -1,0 +1,83 @@
+{
+  "timestamp": "2026-03-09 09:43:49",
+  "alert": {
+    "reason": "High failed login count (122 attempts) | CPU critical (93.5%)",
+    "conditions": [
+      "failed_login",
+      "cpu_high"
+    ],
+    "active": 10,
+    "max_capacity": 10,
+    "cpu_pct": 93.5,
+    "ram_pct": 51.9,
+    "failed_logins": 122,
+    "rpm": 11,
+    "bandwidth_bytes_s": 500384,
+    "high_latency_clients": [],
+    "timestamp": "2026-03-09 09:43:46"
+  },
+  "agents_used": [
+    "SecurityAgent",
+    "PerformanceAgent"
+  ],
+  "agent_results": [
+    {
+      "agent": "SecurityAgent",
+      "alert_key": "failed_login",
+      "alert_reason": "High failed login count (122 attempts)",
+      "severity": "Critical",
+      "root_cause": "Ongoing brute-force attack: 122 failed logins detected. Likely automated credential stuffing.",
+      "immediate_action": "Immediately block the source IP. Enable account lockout after 5 attempts.",
+      "preventive_measures": [
+        "Implement exponential backoff on failed auth attempts.",
+        "Deploy fail2ban or IP-level rate limiting at the edge.",
+        "Add multi-factor authentication for all privileged accounts.",
+        "Set up alerts for >5 failed logins from a single IP within 60 seconds."
+      ],
+      "confidence": "Heuristic",
+      "resolved": false,
+      "escalation_needed": true,
+      "timestamp": "2026-03-09 09:43:04"
+    },
+    {
+      "agent": "PerformanceAgent",
+      "alert_key": "cpu_high",
+      "alert_reason": "High failed login count (122 attempts) | CPU critical (93.5%)",
+      "severity": "High",
+      "root_cause": "CPU at 93.5%. Heavy compute or bulk processing tasks are saturating the processor.",
+      "immediate_action": "Throttle compute-intensive tasks. Queue bulk_process and compute jobs. Check for runaway threads.",
+      "preventive_measures": [
+        "Implement task queuing for heavy compute jobs.",
+        "Add CPU usage limits per client session.",
+        "Offload compute tasks to a background worker process.",
+        "Profile the most CPU-intensive tasks and optimize them."
+      ],
+      "confidence": "Heuristic",
+      "resolved": false,
+      "escalation_needed": true,
+      "timestamp": "2026-03-09 09:43:47"
+    }
+  ],
+  "final_diagnosis": {
+    "primary_agent": "SecurityAgent",
+    "root_cause": "Ongoing brute-force attack: 122 failed logins detected. Likely automated credential stuffing.",
+    "severity": "Critical",
+    "immediate_action": "Immediately block the source IP. Enable account lockout after 5 attempts.",
+    "preventive_measures": [
+      "Implement exponential backoff on failed auth attempts.",
+      "Deploy fail2ban or IP-level rate limiting at the edge.",
+      "Add multi-factor authentication for all privileged accounts.",
+      "Set up alerts for >5 failed logins from a single IP within 60 seconds.",
+      "Implement task queuing for heavy compute jobs.",
+      "Add CPU usage limits per client session.",
+      "Offload compute tasks to a background worker process.",
+      "Profile the most CPU-intensive tasks and optimize them."
+    ],
+    "confidence": "Heuristic",
+    "resolved": false,
+    "escalation_needed": true
+  },
+  "resolved": false,
+  "total_agents": 2,
+  "incident_id": 75
+}

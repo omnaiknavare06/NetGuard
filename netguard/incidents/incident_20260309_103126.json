@@ -1,0 +1,59 @@
+{
+  "timestamp": "2026-03-09 10:31:26",
+  "alert": {
+    "reason": "Bandwidth spike (9765 KB/s)",
+    "conditions": [
+      "bandwidth_high"
+    ],
+    "active": 1,
+    "max_capacity": 10,
+    "cpu_pct": 67.3,
+    "ram_pct": 24.9,
+    "failed_logins": 35,
+    "rpm": 36,
+    "bandwidth_bytes_s": 10000000,
+    "high_latency_clients": [],
+    "timestamp": "2026-03-09 10:31:23"
+  },
+  "agents_used": [
+    "PerformanceAgent"
+  ],
+  "agent_results": [
+    {
+      "agent": "PerformanceAgent",
+      "alert_key": "bandwidth_high",
+      "alert_reason": "Bandwidth spike (9765 KB/s)",
+      "severity": "High",
+      "root_cause": "Bandwidth at 9765.6 KB/s. Large file transfers or streaming sessions are saturating the network.",
+      "immediate_action": "Rate-limit per-client bandwidth. Prioritize control traffic over bulk data.",
+      "preventive_measures": [
+        "Add per-client bandwidth throttling.",
+        "Separate bulk transfer traffic to a dedicated network interface.",
+        "Cache frequently downloaded files at the edge.",
+        "Compress data payloads before transmission."
+      ],
+      "confidence": "Heuristic",
+      "resolved": false,
+      "escalation_needed": true,
+      "timestamp": "2026-03-09 10:31:23"
+    }
+  ],
+  "final_diagnosis": {
+    "primary_agent": "PerformanceAgent",
+    "root_cause": "Bandwidth at 9765.6 KB/s. Large file transfers or streaming sessions are saturating the network.",
+    "severity": "High",
+    "immediate_action": "Rate-limit per-client bandwidth. Prioritize control traffic over bulk data.",
+    "preventive_measures": [
+      "Add per-client bandwidth throttling.",
+      "Separate bulk transfer traffic to a dedicated network interface.",
+      "Cache frequently downloaded files at the edge.",
+      "Compress data payloads before transmission."
+    ],
+    "confidence": "Heuristic",
+    "resolved": false,
+    "escalation_needed": true
+  },
+  "resolved": false,
+  "total_agents": 1,
+  "incident_id": 2
+}

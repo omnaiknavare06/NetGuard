@@ -1,0 +1,79 @@
+{
+  "timestamp": "2026-03-09 10:52:45",
+  "alert": {
+    "reason": "Server DEGRADED (15/14 sessions) | Server CRITICAL \u2014 rejecting new connections",
+    "conditions": [
+      "capacity_degrade",
+      "capacity_critical"
+    ],
+    "active": 15,
+    "max_capacity": 10,
+    "cpu_pct": 35.0,
+    "ram_pct": 54.0,
+    "failed_logins": 71,
+    "rpm": 0,
+    "bandwidth_bytes_s": 0,
+    "high_latency_clients": [],
+    "timestamp": "2026-03-09 10:52:45"
+  },
+  "agents_used": [
+    "CapacityAgent",
+    "CapacityAgent"
+  ],
+  "agent_results": [
+    {
+      "agent": "CapacityAgent",
+      "alert_key": "capacity_degrade",
+      "alert_reason": "Server DEGRADED (15/14 sessions) | Server CRITICAL \u2014 rejecting new connections",
+      "severity": "Critical",
+      "root_cause": "Server at 100% capacity (15/15 sessions). New connections are being REJECTED. Service is unavailable for new users.",
+      "immediate_action": "Scale horizontally immediately. Enable request queuing. Review session TTL and evict idle sessions.",
+      "preventive_measures": [
+        "Implement session TTL to auto-evict idle connections.",
+        "Configure connection pooling and reuse.",
+        "Set up horizontal scaling triggers at 70% capacity.",
+        "Add a load balancer to distribute sessions across multiple instances."
+      ],
+      "confidence": "Heuristic",
+      "resolved": false,
+      "escalation_needed": true,
+      "timestamp": "2026-03-09 10:49:35"
+    },
+    {
+      "agent": "CapacityAgent",
+      "alert_key": "capacity_critical",
+      "alert_reason": "Server DEGRADED (15/14 sessions) | Server CRITICAL \u2014 rejecting new connections",
+      "severity": "Critical",
+      "root_cause": "Server at 100% capacity (15/15 sessions). New connections are being REJECTED. Service is unavailable for new users.",
+      "immediate_action": "Scale horizontally immediately. Enable request queuing. Review session TTL and evict idle sessions.",
+      "preventive_measures": [
+        "Implement session TTL to auto-evict idle connections.",
+        "Configure connection pooling and reuse.",
+        "Set up horizontal scaling triggers at 70% capacity.",
+        "Add a load balancer to distribute sessions across multiple instances."
+      ],
+      "confidence": "Heuristic",
+      "resolved": false,
+      "escalation_needed": true,
+      "timestamp": "2026-03-09 10:49:38"
+    }
+  ],
+  "final_diagnosis": {
+    "primary_agent": "CapacityAgent",
+    "root_cause": "Server at 100% capacity (15/15 sessions). New connections are being REJECTED. Service is unavailable for new users.",
+    "severity": "Critical",
+    "immediate_action": "Scale horizontally immediately. Enable request queuing. Review session TTL and evict idle sessions.",
+    "preventive_measures": [
+      "Implement session TTL to auto-evict idle connections.",
+      "Configure connection pooling and reuse.",
+      "Set up horizontal scaling triggers at 70% capacity.",
+      "Add a load balancer to distribute sessions across multiple instances."
+    ],
+    "confidence": "Heuristic",
+    "resolved": false,
+    "escalation_needed": true
+  },
+  "resolved": false,
+  "total_agents": 2,
+  "incident_id": 32
+}

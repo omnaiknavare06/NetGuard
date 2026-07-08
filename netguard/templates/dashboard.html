@@ -1,0 +1,1473 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>NetGuard AI — Admin Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet" />
+    <style>
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0
+        }
+
+        :root {
+            --bg: #070a12;
+            --card: #0d1120;
+            --card2: #131826;
+            --border: rgba(255, 255, 255, .07);
+            --text: #dde3ef;
+            --muted: #6b7799;
+            --green: #22c55e;
+            --yellow: #f59e0b;
+            --red: #ef4444;
+            --blue: #3b82f6;
+            --purple: #a855f7;
+            --cyan: #06b6d4;
+            --orange: #f97316;
+        }
+
+        html,
+        body {
+            height: 100%;
+            overflow: hidden
+        }
+
+        /* NO SCROLL — fits on screen */
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            display: flex;
+            flex-direction: column
+        }
+
+        /* === NAV === */
+        nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 20px;
+            border-bottom: 1px solid var(--border);
+            background: rgba(7, 10, 18, .97);
+            backdrop-filter: blur(12px);
+            flex-shrink: 0;
+            z-index: 100
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            font-weight: 800;
+            font-size: .92rem
+        }
+
+        .pulse {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--green);
+            box-shadow: 0 0 8px var(--green);
+            animation: pulse 2s infinite;
+            flex-shrink: 0
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                transform: scale(1);
+                opacity: 1
+            }
+
+            50% {
+                transform: scale(1.6);
+                opacity: .4
+            }
+        }
+
+        .nav-mid {
+            display: flex;
+            gap: 6px;
+            align-items: center
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 6px
+        }
+
+        .clock {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: .75rem;
+            color: var(--muted);
+            padding: 0 6px
+        }
+
+        .btn {
+            padding: 6px 11px;
+            border-radius: 6px;
+            border: 1px solid var(--border);
+            background: var(--card2);
+            color: var(--text);
+            font: 600 .74rem 'Inter', sans-serif;
+            cursor: pointer;
+            transition: all .15s
+        }
+
+        .btn:hover {
+            filter: brightness(1.3)
+        }
+
+        .btn.r {
+            color: var(--red);
+            border-color: rgba(239, 68, 68, .3);
+            background: rgba(239, 68, 68, .08)
+        }
+
+        .btn.y {
+            color: var(--yellow);
+            border-color: rgba(245, 158, 11, .3);
+            background: rgba(245, 158, 11, .08)
+        }
+
+        .btn.b {
+            color: var(--blue);
+            border-color: rgba(59, 130, 246, .3);
+            background: rgba(59, 130, 246, .08)
+        }
+
+        .tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 3px;
+            font-size: .65rem;
+            font-weight: 700;
+            padding: 2px 7px;
+            border-radius: 99px;
+            border: 1px solid transparent;
+            white-space: nowrap
+        }
+
+        .tag.green {
+            background: rgba(34, 197, 94, .12);
+            color: var(--green);
+            border-color: rgba(34, 197, 94, .25)
+        }
+
+        .tag.yellow {
+            background: rgba(245, 158, 11, .12);
+            color: var(--yellow);
+            border-color: rgba(245, 158, 11, .25)
+        }
+
+        .tag.red {
+            background: rgba(239, 68, 68, .12);
+            color: var(--red);
+            border-color: rgba(239, 68, 68, .25)
+        }
+
+        .tag.blue {
+            background: rgba(59, 130, 246, .12);
+            color: var(--blue);
+            border-color: rgba(59, 130, 246, .25)
+        }
+
+        .tag.purple {
+            background: rgba(168, 85, 247, .12);
+            color: var(--purple);
+            border-color: rgba(168, 85, 247, .25)
+        }
+
+        .tag.cyan {
+            background: rgba(6, 182, 212, .12);
+            color: var(--cyan);
+            border-color: rgba(6, 182, 212, .25)
+        }
+
+        .tag.orange {
+            background: rgba(249, 115, 22, .12);
+            color: var(--orange);
+            border-color: rgba(249, 115, 22, .25)
+        }
+
+        .tag.muted {
+            background: rgba(255, 255, 255, .05);
+            color: var(--muted)
+        }
+
+        /* === MAIN LAYOUT — 3 COLUMNS, fills screen === */
+        .room {
+            flex: 1;
+            display: grid;
+            grid-template-columns: 260px 1fr 300px;
+            gap: 0;
+            overflow: hidden
+        }
+
+        /* ── LEFT PANEL: metrics stack ── */
+        .left-panel {
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            background: var(--card)
+        }
+
+        .panel-head {
+            padding: 12px 14px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-shrink: 0
+        }
+
+        .panel-title {
+            font-size: .75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: .08em;
+            color: var(--muted)
+        }
+
+        /* Metric tiles */
+        .metric-stack {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+            flex: 1;
+            overflow-y: auto
+        }
+
+        .m-tile {
+            padding: 14px;
+            border-bottom: 1px solid var(--border);
+            transition: background .2s
+        }
+
+        .m-tile.warn {
+            background: rgba(245, 158, 11, .05)
+        }
+
+        .m-tile.crit {
+            background: rgba(239, 68, 68, .06);
+            animation: tileCrit 2s infinite
+        }
+
+        @keyframes tileCrit {
+
+            0%,
+            100% {
+                background: rgba(239, 68, 68, .06)
+            }
+
+            50% {
+                background: rgba(239, 68, 68, .12)
+            }
+        }
+
+        .m-name {
+            font-size: .62rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: .08em;
+            color: var(--muted)
+        }
+
+        .m-row {
+            display: flex;
+            align-items: flex-end;
+            gap: 8px;
+            margin: 6px 0 4px
+        }
+
+        .m-val {
+            font-size: 1.9rem;
+            font-weight: 800;
+            line-height: 1;
+            transition: color .3s
+        }
+
+        .m-unit {
+            font-size: .75rem;
+            color: var(--muted);
+            margin-bottom: 4px
+        }
+
+        .m-status {
+            font-size: .68rem;
+            color: var(--muted);
+            line-height: 1.4
+        }
+
+        .bar {
+            height: 4px;
+            background: rgba(255, 255, 255, .06);
+            border-radius: 99px;
+            margin-top: 8px;
+            overflow: hidden
+        }
+
+        .bf {
+            height: 100%;
+            border-radius: inherit;
+            transition: width .6s, background .4s
+        }
+
+        /* Session mini table */
+        .sess-scroll {
+            flex: 1;
+            overflow-y: auto
+        }
+
+        .sess-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 7px 14px;
+            border-bottom: 1px solid rgba(255, 255, 255, .04);
+            font-size: .72rem
+        }
+
+        .sess-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            flex-shrink: 0
+        }
+
+        .sess-id {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: .68rem;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            flex: 1
+        }
+
+        .sess-lat {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: .65rem;
+            color: var(--muted);
+            margin-left: auto
+        }
+
+        /* ── CENTER PANEL: AI Situation Feed ── */
+        .center-panel {
+            display: flex;
+            flex-direction: column;
+            overflow: hidden
+        }
+
+        .feed-area {
+            flex: 1;
+            overflow-y: auto;
+            padding: 12px
+        }
+
+        /* Incident story card */
+        .story-card {
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            background: var(--card);
+            margin-bottom: 10px;
+            overflow: hidden;
+            animation: slideIn .35s ease-out
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-6px)
+            }
+
+            to {
+                opacity: 1;
+                transform: none
+            }
+        }
+
+        .story-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 14px;
+            border-bottom: 1px solid var(--border)
+        }
+
+        .story-icon {
+            font-size: 1.3rem;
+            flex-shrink: 0
+        }
+
+        .story-title-block {
+            flex: 1;
+            min-width: 0
+        }
+
+        .story-title {
+            font-size: .88rem;
+            font-weight: 800;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis
+        }
+
+        .story-ts {
+            font-size: .62rem;
+            color: var(--muted);
+            font-family: 'JetBrains Mono', monospace
+        }
+
+        .story-tags {
+            display: flex;
+            gap: 5px;
+            flex-shrink: 0
+        }
+
+        /* Story body — 3 zones */
+        .story-body {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0
+        }
+
+        .story-zone {
+            padding: 11px 14px;
+            border-bottom: 1px solid var(--border)
+        }
+
+        .story-zone:nth-child(odd) {
+            border-right: 1px solid var(--border)
+        }
+
+        .sz-label {
+            font-size: .58rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: .09em;
+            color: var(--muted);
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            gap: 5px
+        }
+
+        .sz-val {
+            font-size: .78rem;
+            font-weight: 600;
+            line-height: 1.5;
+            color: var(--text)
+        }
+
+        /* Agent flow inline */
+        .agent-flow {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            padding: 9px 14px;
+            border-bottom: 1px solid var(--border);
+            flex-wrap: wrap;
+            row-gap: 4px
+        }
+
+        .af {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: .68rem;
+            font-weight: 600;
+            padding: 3px 8px;
+            border-radius: 5px;
+            background: rgba(255, 255, 255, .05)
+        }
+
+        .af.done {
+            background: rgba(34, 197, 94, .08);
+            color: var(--green)
+        }
+
+        .af-arr {
+            color: var(--muted);
+            font-size: .75rem
+        }
+
+        /* AI Voice block */
+        .ai-voice {
+            margin: 0;
+            padding: 11px 14px;
+            background: rgba(168, 85, 247, .05);
+            border-bottom: 1px solid rgba(168, 85, 247, .12)
+        }
+
+        .ai-voice-head {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            margin-bottom: 7px
+        }
+
+        .ai-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: var(--purple);
+            box-shadow: 0 0 6px var(--purple);
+            animation: pulse 1.5s infinite
+        }
+
+        .ai-voice-title {
+            font-size: .72rem;
+            font-weight: 700;
+            color: var(--purple)
+        }
+
+        .ai-conf {
+            font-size: .62rem;
+            color: var(--muted);
+            margin-left: auto
+        }
+
+        .ai-text {
+            font-size: .78rem;
+            line-height: 1.6;
+            color: var(--text)
+        }
+
+        .ai-status-row {
+            margin-top: 6px;
+            font-size: .68rem;
+            color: var(--muted);
+            line-height: 1.5
+        }
+
+        /* Executed actions list — the star! */
+        .actions-list {
+            padding: 10px 14px
+        }
+
+        .action-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 9px;
+            padding: 7px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, .04)
+        }
+
+        .action-item:last-child {
+            border-bottom: none
+        }
+
+        .action-check {
+            width: 20px;
+            height: 20px;
+            border-radius: 99px;
+            background: rgba(34, 197, 94, .15);
+            border: 1px solid rgba(34, 197, 94, .3);
+            color: var(--green);
+            font-size: .75rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            margin-top: 1px
+        }
+
+        .action-content {
+            flex: 1
+        }
+
+        .action-desc {
+            font-size: .78rem;
+            font-weight: 600;
+            line-height: 1.3;
+            color: var(--text)
+        }
+
+        .action-result {
+            font-size: .67rem;
+            color: var(--muted);
+            margin-top: 2px
+        }
+
+        .action-agent {
+            font-size: .6rem;
+            font-weight: 600;
+            color: var(--purple)
+        }
+
+        .timeline-list {
+            padding: 8px 14px;
+            border-top: 1px solid var(--border);
+            background: rgba(59, 130, 246, .04)
+        }
+
+        .timeline-item {
+            font-size: .68rem;
+            color: var(--text);
+            padding: 4px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, .04)
+        }
+
+        .timeline-item:last-child {
+            border-bottom: none
+        }
+
+        .timeline-ts {
+            color: var(--muted);
+            font-family: 'JetBrains Mono', monospace;
+            margin-right: 6px
+        }
+
+        .cmd-list {
+            padding: 10px 14px;
+            border-top: 1px solid var(--border);
+            background: rgba(6, 182, 212, .04)
+        }
+
+        .cmd-item {
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, .04)
+        }
+
+        .cmd-item:last-child {
+            border-bottom: none
+        }
+
+        .cmd-head {
+            font-size: .72rem;
+            font-weight: 700;
+            color: var(--cyan)
+        }
+
+        .cmd-status {
+            color: var(--muted);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: .62rem
+        }
+
+        .cmd-output {
+            margin-top: 4px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: .62rem;
+            color: var(--muted);
+            white-space: pre-wrap;
+            word-break: break-word
+        }
+
+        .ai-report-panel {
+            margin: 10px 12px;
+            border: 1px solid rgba(168, 85, 247, .22);
+            border-radius: 10px;
+            background: rgba(168, 85, 247, .05);
+            padding: 10px
+        }
+
+        .ai-report-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 8px;
+            margin-top: 8px
+        }
+
+        .ai-kpi {
+            background: rgba(255, 255, 255, .05);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 8px
+        }
+
+        .ai-kpi-k {
+            font-size: .58rem;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: .08em
+        }
+
+        .ai-kpi-v {
+            font-size: .9rem;
+            margin-top: 3px;
+            font-weight: 800
+        }
+
+        .ai-note {
+            font-size: .67rem;
+            color: var(--muted);
+            margin-top: 8px;
+            line-height: 1.45;
+            word-break: break-word
+        }
+
+        /* Empty state */
+        .empty-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            color: var(--muted);
+            text-align: center;
+            gap: 10px;
+            padding: 20px
+        }
+
+        .empty-icon {
+            font-size: 2.5rem;
+            opacity: .4
+        }
+
+        .empty-title {
+            font-size: .88rem;
+            font-weight: 700;
+            opacity: .6
+        }
+
+        .empty-sub {
+            font-size: .75rem;
+            opacity: .4;
+            line-height: 1.6;
+            max-width: 260px
+        }
+
+        /* ── RIGHT PANEL: active alerts + system log ── */
+        .right-panel {
+            border-left: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            background: var(--card)
+        }
+
+        /* Alert list */
+        .alert-scroll {
+            overflow-y: auto;
+            max-height: 220px
+        }
+
+        .alert-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            border-bottom: 1px solid rgba(255, 255, 255, .04);
+            font-size: .74rem;
+            border-left: 3px solid transparent
+        }
+
+        .alert-row.red {
+            border-left-color: var(--red);
+            background: rgba(239, 68, 68, .03)
+        }
+
+        .alert-row.yellow {
+            border-left-color: var(--yellow);
+            background: rgba(245, 158, 11, .03)
+        }
+
+        .alert-row.blue {
+            border-left-color: var(--blue)
+        }
+
+        .alert-desc {
+            flex: 1;
+            font-weight: 600;
+            line-height: 1.3;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap
+        }
+
+        .alert-ts {
+            font-size: .6rem;
+            color: var(--muted);
+            font-family: 'JetBrains Mono', monospace
+        }
+
+        /* System log */
+        .log-box {
+            flex: 1;
+            overflow-y: auto;
+            padding: 8px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: .65rem;
+            line-height: 1.7;
+            background: #050810
+        }
+
+        .ll {
+            white-space: pre-wrap;
+            word-break: break-all;
+            color: #2a3456
+        }
+
+        .ll.MONITOR {
+            color: #f59e0b
+        }
+
+        .ll.ORCHESTR {
+            color: #06b6d4
+        }
+
+        .ll.SecurityAgent {
+            color: #f87171
+        }
+
+        .ll.CapacityAgent {
+            color: #fb923c
+        }
+
+        .ll.PerformanceAgent {
+            color: #a3e635
+        }
+
+        .ll.LatencyAgent {
+            color: #38bdf8
+        }
+
+        .ll.AI {
+            color: #a855f7
+        }
+
+        .ll.INCIDENT {
+            color: #ef4444;
+            font-weight: 600
+        }
+
+        .ll.CLIENT {
+            color: #22d3ee
+        }
+
+        .ll.SYSTEM {
+            color: #475569
+        }
+
+        .ll.CAPACITY {
+            color: #f97316
+        }
+
+        .ll.PIPELINE {
+            color: #3b82f6
+        }
+
+        .ll.EXECUTOR {
+            color: #22c55e
+        }
+
+        /* scrollbar */
+        ::-webkit-scrollbar {
+            width: 3px;
+            height: 3px
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, .08);
+            border-radius: 99px
+        }
+
+        /* Capacity ring mini */
+        .cap-mini {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 14px;
+            border-bottom: 1px solid var(--border)
+        }
+
+        .ring-mini {
+            position: relative;
+            width: 50px;
+            height: 50px;
+            flex-shrink: 0
+        }
+
+        .ring-mini svg {
+            transform: rotate(-90deg)
+        }
+
+        .ring-num {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            font-weight: 800
+        }
+
+        .cap-labels {
+            flex: 1
+        }
+
+        .cap-label-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: .67rem;
+            margin-bottom: 3px
+        }
+
+        .cap-label-key {
+            color: var(--muted)
+        }
+
+        .cap-label-val {
+            font-weight: 700
+        }
+
+        @media(max-width:900px) {
+            .room {
+                grid-template-columns: 1fr
+            }
+
+            .left-panel,
+            .right-panel {
+                display: none
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ═══ NAV ═══ -->
+    <nav>
+        <div class="brand">
+            <div class="pulse"></div>NetGuard AI — Situation Room
+        </div>
+        <div class="nav-mid">
+            <span id="sseTag" class="tag blue">Connecting…</span>
+            <span id="modeTag" class="tag muted">Normal</span>
+            <span id="aiTag" class="tag purple" style="display:none">⚡ AI Active</span>
+        </div>
+        <div class="nav-right">
+            <span class="clock" id="clock">--:--:--</span>
+            <button class="btn b" onclick="bumpUsers(5)">Users +5</button>
+            <button class="btn b" onclick="showAiReport()">AI Report</button>
+            <button class="btn y" onclick="sim('overload')">Sim Overload</button>
+            <button class="btn r" onclick="sim('attack')">Sim Attack</button>
+            <button class="btn y" onclick="sim('latency')">Sim Latency</button>
+            <button class="btn r" onclick="doReset()">Reset</button>
+            <a href="/client" style="text-decoration:none"><button class="btn b">Client →</button></a>
+        </div>
+    </nav>
+
+    <!-- ═══ 3-COLUMN ROOM ═══ -->
+    <div class="room">
+
+        <!-- ══ LEFT: Metrics + Sessions ══ -->
+        <div class="left-panel">
+            <div class="panel-head">
+                <span class="panel-title">Live Metrics</span>
+                <span class="tag muted" id="incTag">0 incidents</span>
+            </div>
+            <div class="metric-stack">
+                <!-- CPU -->
+                <div class="m-tile" id="mcCpu">
+                    <div class="m-name">CPU Usage</div>
+                    <div class="m-row">
+                        <div class="m-val" id="mCpu">—</div>
+                        <div class="m-unit">%</div>
+                    </div>
+                    <div class="m-status" id="mCpuStatus">Normal processing</div>
+                    <div class="bar">
+                        <div class="bf" id="bCpu"></div>
+                    </div>
+                </div>
+                <!-- RAM -->
+                <div class="m-tile" id="mcRam">
+                    <div class="m-name">Memory Usage</div>
+                    <div class="m-row">
+                        <div class="m-val" id="mRam">—</div>
+                        <div class="m-unit">%</div>
+                    </div>
+                    <div class="m-status" id="mRamStatus">Normal memory</div>
+                    <div class="bar">
+                        <div class="bf" id="bRam"></div>
+                    </div>
+                </div>
+                <!-- Failed Logins -->
+                <div class="m-tile" id="mcFl">
+                    <div class="m-name">Failed Logins</div>
+                    <div class="m-row">
+                        <div class="m-val" id="mFl">—</div>
+                        <div class="m-unit">attempts</div>
+                    </div>
+                    <div class="m-status" id="mFlStatus">No suspicious activity</div>
+                </div>
+                <!-- Sessions / Capacity -->
+                <div class="m-tile" id="mcSess">
+                    <div class="m-name">Server Load</div>
+                    <div class="cap-mini" style="padding:8px 0 0 0;border:none">
+                        <div class="ring-mini">
+                            <svg width="50" height="50" viewBox="0 0 50 50">
+                                <circle cx="25" cy="25" r="19" fill="none" stroke="rgba(255,255,255,.07)"
+                                    stroke-width="6" />
+                                <circle id="ringArc" cx="25" cy="25" r="19" fill="none" stroke="var(--green)"
+                                    stroke-width="6" stroke-dasharray="119" stroke-dashoffset="119"
+                                    stroke-linecap="round" style="transition:stroke-dashoffset .5s,stroke .5s" />
+                            </svg>
+                            <div class="ring-num" id="ringNum">0</div>
+                        </div>
+                        <div class="cap-labels">
+                            <div class="cap-label-row"><span class="cap-label-key">Active</span><span
+                                    class="cap-label-val" id="cActive">0</span></div>
+                            <div class="cap-label-row"><span class="cap-label-key">Max</span><span
+                                    class="cap-label-val" id="cMax">15</span></div>
+                            <div class="cap-label-row"><span class="cap-label-key">Rejected</span><span
+                                    class="cap-label-val" id="cRej">0</span></div>
+                            <div class="cap-label-row"><span class="cap-label-key">Mode</span><span
+                                    class="cap-label-val" id="cMode">Normal</span></div>
+                        </div>
+                    </div>
+                </div>
+                <!-- RPM / BW -->
+                <div class="m-tile">
+                    <div class="m-name">Requests / min</div>
+                    <div class="m-row">
+                        <div class="m-val" id="mRpm">—</div>
+                    </div>
+                    <div class="m-status">Network traffic</div>
+                </div>
+                <div class="m-tile">
+                    <div class="m-name">Bandwidth</div>
+                    <div class="m-row">
+                        <div class="m-val" id="mBw">—</div>
+                        <div class="m-unit">KB/s</div>
+                    </div>
+                    <div class="m-status" id="mBwStatus">Data throughput</div>
+                </div>
+            </div>
+
+            <!-- Sessions list -->
+            <div class="panel-head" style="margin-top:auto"><span class="panel-title">Active Sessions</span><span
+                    id="sessCountTag" class="tag muted">0</span></div>
+            <div class="sess-scroll" id="sessScroll">
+                <div class="empty" style="padding:12px;text-align:center;color:var(--muted);font-size:.72rem">No
+                    sessions</div>
+            </div>
+        </div>
+
+        <!-- ══ CENTER: AI Situation Feed ══ -->
+        <div class="center-panel">
+            <div class="panel-head" style="padding:12px 14px;border-bottom:1px solid var(--border);flex-shrink:0">
+                <span class="panel-title"
+                    style="font-size:.8rem;font-weight:800;color:var(--text);text-transform:none;letter-spacing:0">🔍 AI
+                    Situation Feed</span>
+                <div style="display:flex;gap:6px">
+                    <span class="tag purple">Live</span>
+                    <span id="feedCountTag" class="tag muted">0 events</span>
+                </div>
+            </div>
+            <div class="feed-area" id="feedArea">
+                <div class="empty-state">
+                    <div class="empty-icon">🤖</div>
+                    <div class="empty-title">AI Agents Standing By</div>
+                    <div class="empty-sub">
+                        Waiting for incidents to occur.<br>
+                        Open the <a href="/client" style="color:var(--blue)">Client</a> and connect, then try
+                        "Brute Force ×10" or "Ramp Up" to see AI agents activate.
+                    </div>
+                </div>
+            </div>
+
+            <div class="ai-report-panel">
+                <div class="sz-label">📈 Live AI Report (Realtime)</div>
+                <div class="ai-report-grid">
+                    <div class="ai-kpi"><div class="ai-kpi-k">Incidents</div><div class="ai-kpi-v" id="airInc">0</div></div>
+                    <div class="ai-kpi"><div class="ai-kpi-k">Gemini Used</div><div class="ai-kpi-v" id="airGem">0</div></div>
+                    <div class="ai-kpi"><div class="ai-kpi-k">Heuristic</div><div class="ai-kpi-v" id="airHeu">0</div></div>
+                    <div class="ai-kpi"><div class="ai-kpi-k">Actions</div><div class="ai-kpi-v" id="airAct">0</div></div>
+                    <div class="ai-kpi"><div class="ai-kpi-k">Commands</div><div class="ai-kpi-v" id="airCmd">0</div></div>
+                    <div class="ai-kpi"><div class="ai-kpi-k">Gemini Budget</div><div class="ai-kpi-v" id="airBud">0/0</div></div>
+                </div>
+                <div class="ai-note" id="airNote">Waiting for AI report...</div>
+            </div>
+        </div>
+
+        <!-- ══ RIGHT: Alerts + Log ══ -->
+        <div class="right-panel">
+            <div class="panel-head"><span class="panel-title">Active Alerts</span><span id="alertCountTag"
+                    class="tag green">None</span></div>
+            <div class="alert-scroll" id="alertList">
+                <div style="padding:12px;text-align:center;color:var(--muted);font-size:.72rem">System healthy</div>
+            </div>
+
+            <div class="panel-head"><span class="panel-title">System Log</span><span class="tag blue">Live</span></div>
+            <div class="log-box" id="logBox"></div>
+        </div>
+
+    </div>
+
+    <script>
+        /* ═══ CLOCK ═══ */
+        const tick = () => document.getElementById('clock').textContent = new Date().toLocaleTimeString();
+        setInterval(tick, 1000); tick();
+
+        /* ═══ HELPERS ═══ */
+        const $ = id => document.getElementById(id);
+        const agentIcons = { SecurityAgent: '🛡️', CapacityAgent: '⚙️', PerformanceAgent: '📊', LatencyAgent: '⏱️' };
+        const alertKeyPretty = {
+            failed_login: 'Brute Force / Failed Logins', capacity_degrade: 'Server Overloaded',
+            capacity_critical: 'Server Critical', cpu_high: 'High CPU Usage', ram_high: 'High RAM Usage',
+            rpm_high: 'Request Spike', bandwidth_high: 'Bandwidth Spike', latency_high: 'High Latency',
+        };
+        const sevIcon = { Critical: '🔴', High: '🟠', Medium: '🟡', Low: '🟢' };
+        let feedCount = 0;
+
+        /* ═══ SSE ═══ */
+        let sse;
+        function connectSSE() {
+            sse = new EventSource('/api/events');
+            sse.onopen = () => { $('sseTag').textContent = 'SSE Live'; $('sseTag').className = 'tag green' };
+            sse.onerror = () => { $('sseTag').textContent = 'Reconnecting…'; $('sseTag').className = 'tag yellow'; setTimeout(connectSSE, 3000) };
+            sse.onmessage = e => {
+                try {
+                    const d = JSON.parse(e.data);
+                    if (d.type === 'state') applyState(d.data);
+                    if (d.type === 'incident') applyIncident(d.data);
+                    if (d.type === 'agents') { }// handled via incident
+                } catch { }
+            };
+        }
+        connectSSE();
+
+        /* ═══ STATE ═══ */
+        function setTile(mcId, val, warn, crit) {
+            const el = $(mcId); if (!el) return;
+            el.className = 'm-tile' + (val >= crit ? ' crit' : val >= warn ? ' warn' : '');
+        }
+        function setBar(id, pct) {
+            const el = $(id); if (!el) return;
+            el.style.width = pct + '%';
+            el.style.background = pct >= 85 ? 'var(--red)' : pct >= 70 ? 'var(--yellow)' : 'var(--green)';
+        }
+
+        function applyState(s) {
+            const m = s.metrics, c = s.capacity;
+
+            // Metrics
+            const cpu = m.cpu_pct, ram = m.ram_pct, fl = m.failed_logins;
+            $('mCpu').textContent = cpu; $('mCpu').style.color = cpu >= 85 ? 'var(--red)' : cpu >= 70 ? 'var(--yellow)' : 'var(--green)';
+            $('mRam').textContent = ram; $('mRam').style.color = ram >= 85 ? 'var(--red)' : ram >= 70 ? 'var(--yellow)' : 'var(--green)';
+            $('mFl').textContent = fl; $('mFl').style.color = fl >= 10 ? 'var(--red)' : fl >= 5 ? 'var(--yellow)' : 'var(--green)';
+            $('mRpm').textContent = m.rpm;
+            $('mBw').textContent = (m.bandwidth_bytes_s / 1024).toFixed(1);
+
+            $('mCpuStatus').textContent = cpu >= 85 ? 'CRITICAL — throttle active' : cpu >= 70 ? 'Warning — heavy load' : 'Normal processing';
+            $('mRamStatus').textContent = ram >= 85 ? 'CRITICAL — freeing memory' : ram >= 70 ? 'Warning — high memory' : 'Normal memory';
+            $('mFlStatus').textContent = fl >= 10 ? 'ALERT — IPs may be blocked' : fl >= 5 ? 'Warning — suspicious' : 'No suspicious activity';
+            $('mBwStatus').textContent = m.bandwidth_bytes_s >= 5000000 ? 'WARNING — bandwidth spike' : 'Data throughput';
+
+            setTile('mcCpu', cpu, 70, 85); setTile('mcRam', ram, 70, 85); setTile('mcFl', fl, 5, 10);
+            setBar('bCpu', cpu); setBar('bRam', ram);
+
+            $('incTag').textContent = m.incident_count + ' incident' + (m.incident_count !== 1 ? 's' : '');
+
+            // Capacity ring
+            const pct = c.load_pct / 100, circ = 119;
+            $('ringArc').style.strokeDashoffset = circ - (circ * pct);
+            $('ringArc').style.stroke = c.mode === 'reject' ? 'var(--red)' : c.mode === 'degraded' ? 'var(--yellow)' : 'var(--green)';
+            $('ringNum').textContent = c.active_sessions;
+            $('cActive').textContent = c.active_sessions;
+            $('cMode').textContent = c.mode.charAt(0).toUpperCase() + c.mode.slice(1);
+            $('cRej').textContent = c.rejected_requests;
+            $('cMax').textContent = c.max_reject;
+
+            // Mode tag
+            const mClr = { normal: 'green', degraded: 'yellow', reject: 'red' };
+            $('modeTag').textContent = c.mode.charAt(0).toUpperCase() + c.mode.slice(1);
+            $('modeTag').className = 'tag ' + (mClr[c.mode] || 'muted');
+
+            // Sessions
+            const ss = $('sessScroll');
+            if (!s.sessions || s.sessions.length === 0) {
+                ss.innerHTML = '<div style="padding:12px;text-align:center;color:var(--muted);font-size:.72rem">No sessions</div>';
+                $('sessCountTag').textContent = '0';
+            } else {
+                $('sessCountTag').textContent = s.sessions.length;
+                ss.innerHTML = s.sessions.map(ses => {
+                    const dot = ses.degraded ? 'var(--yellow)' : ses.throttled ? 'var(--orange)' : 'var(--green)';
+                    const badge = ses.throttled ? '🚫' : ses.degraded ? '⚠️' : '●';
+                    return `<div class="sess-row">
+        <div class="sess-dot" style="background:${dot}"></div>
+        <div class="sess-id">${ses.client_id.slice(0, 18)}</div>
+        <div class="sess-lat">${ses.avg_latency_ms}ms</div>
+        <div style="font-size:.6rem;color:var(--muted)">${badge}</div>
+      </div>`;
+                }).join('');
+            }
+
+            // Alerts
+            const al = $('alertList'), ac = $('alertCountTag');
+            if (!s.active_alerts || s.active_alerts.length === 0) {
+                al.innerHTML = '<div style="padding:12px;text-align:center;color:var(--muted);font-size:.72rem">System healthy</div>';
+                ac.textContent = 'None'; ac.className = 'tag green';
+            } else {
+                ac.textContent = s.active_alerts.length + ' active'; ac.className = 'tag red';
+                al.innerHTML = s.active_alerts.slice(0, 10).map(a => {
+                    const k = a.key || ''; const col = k.includes('login') ? 'red' : k.includes('capacity') ? 'orange' : 'yellow';
+                    return `<div class="alert-row ${col}">
+        <div class="alert-desc">${a.reason || a.key}</div>
+        <div class="alert-ts">${(a.timestamp || '').slice(11, 19)}</div>
+      </div>`;
+                }).join('');
+            }
+
+            // Blacklisted IPs tag
+            if (s.blacklisted_ips && s.blacklisted_ips.length > 0) {
+                $('aiTag').textContent = `🚫 ${s.blacklisted_ips.length} IP blocked`;
+                $('aiTag').style.display = 'inline-flex';
+            }
+            if (s.cpu_throttle_active) {
+                $('aiTag').textContent = '⚡ CPU Throttle ON'; $('aiTag').style.display = 'inline-flex';
+            }
+        }
+
+        /* ═══ INCIDENT CARD — the big AI story ═══ */
+        function applyIncident(inc) {
+            const fd = inc.final_diagnosis || {};
+            const sev = fd.severity || 'Medium';
+            const sevCol = sev === 'Critical' || sev === 'High' ? 'red' : sev === 'Medium' ? 'yellow' : 'green';
+            const icon = sevIcon[sev] || '⚪';
+            const conditions = (inc.alert?.conditions || []).map(k => alertKeyPretty[k] || k).join(' + ');
+            const conf = fd.confidence || 'Heuristic';
+            const isGemini = conf.includes('Gemini');
+            const aiDetails = (inc.agent_results || []).map(r => {
+                const m = r.ai_meta || {};
+                const src = m.source || 'heuristic';
+                const used = m.used ? 'Gemini used' : 'Gemini not used';
+                const why = m.skip_reason ? `(${m.skip_reason})` : '';
+                const err = m.error ? ` error: ${m.error}` : '';
+                return `${r.agent}: ${used}, source=${src} ${why}${err}`.trim();
+            }).join('<br>');
+            feedCount++;
+            $('feedCountTag').textContent = feedCount + ' event' + (feedCount !== 1 ? 's' : '');
+
+            // Remove empty state
+            const area = $('feedArea');
+            const empty = area.querySelector('.empty-state');
+            if (empty) empty.remove();
+
+            // Build executed actions HTML
+            const actions = inc.executed_actions || [];
+            const timeline = inc.timeline || [];
+            const commands = inc.command_runs || [];
+            const actionsHtml = actions.length === 0
+                ? '<div style="padding:10px 14px;font-size:.72rem;color:var(--muted)">No automatic actions required.</div>'
+                : `<div class="actions-list">${actions.map(a => `
+        <div class="action-item">
+          <div class="action-check">✓</div>
+          <div class="action-content">
+            <div class="action-agent">${a.agent || 'System'}</div>
+            <div class="action-desc">${a.description}</div>
+            <div class="action-result">${a.result || ''}</div>
+          </div>
+          <span style="font-size:.6rem;color:var(--muted);font-family:monospace;flex-shrink:0">${(a.timestamp || '').slice(11, 19)}</span>
+        </div>`).join('')}</div>`;
+
+            const timelineHtml = timeline.length === 0
+                ? '<div style="font-size:.68rem;color:var(--muted)">No timeline events.</div>'
+                : timeline.map(t => `<div class="timeline-item"><span class="timeline-ts">[${t.timestamp || '--:--:--'}]</span>${t.step}: ${t.detail}</div>`).join('');
+
+            const commandHtml = commands.length === 0
+                ? '<div style="font-size:.68rem;color:var(--muted)">No diagnostics executed for this incident.</div>'
+                : commands.map(c => `
+                    <div class="cmd-item">
+                      <div class="cmd-head">${c.command} (${c.target || '-'})</div>
+                      <div class="cmd-status">status=${c.status || 'unknown'} | ${c.cmd_string || ''}</div>
+                      <div class="cmd-output">${c.output_preview || 'No output.'}</div>
+                    </div>
+                `).join('');
+
+            // Build agent flow
+            const flowHtml = [
+                { icon: '📡', name: 'Monitor', label: 'Detected' },
+                { icon: '🧠', name: 'Orchestrator', label: 'Dispatched' },
+                ...(inc.agents_used || []).map(a => ({ icon: agentIcons[a] || '🤖', name: a, label: 'Analysed' })),
+                { icon: fd.resolved ? '✅' : '⚠️', name: 'Result', label: fd.resolved ? 'Resolved' : 'Flagged' },
+            ].map((s, i) => `${i > 0 ? '<span class="af-arr">›</span>' : ''}<div class="af done">${s.icon} ${s.name}</div>`).join('');
+
+            // Plain-English AI voice
+            const voiceText = `"${fd.root_cause}" — ${fd.immediate_action}`;
+
+            const html = `<div class="story-card">
+    <div class="story-header">
+      <div class="story-icon">${icon}</div>
+      <div class="story-title-block">
+        <div class="story-title">Incident #${inc.incident_id}: ${conditions || sev + ' Alert'}</div>
+        <div class="story-ts">${inc.timestamp}</div>
+      </div>
+      <div class="story-tags">
+        <span class="tag ${sevCol}">${sev}</span>
+        <span class="tag ${isGemini ? 'purple' : 'cyan'}">${isGemini ? 'Gemini AI' : 'Heuristic'}</span>
+        ${fd.resolved ? '<span class="tag green">Resolved</span>' : '<span class="tag yellow">Monitoring</span>'}
+      </div>
+    </div>
+
+    <!-- Agent Flow -->
+    <div class="agent-flow">${flowHtml}</div>
+
+    <!-- AI Voice -->
+    <div class="ai-voice">
+      <div class="ai-voice-head">
+        <div class="ai-dot"></div>
+        <div class="ai-voice-title">🤖 What the AI found:</div>
+        <div class="ai-conf">Source: ${conf}</div>
+      </div>
+      <div class="ai-text">${voiceText}</div>
+            <div class="ai-status-row">${aiDetails || 'AI status unavailable for this incident.'}</div>
+    </div>
+
+    <!-- 2-col detail -->
+    <div class="story-body">
+      <div class="story-zone">
+        <div class="sz-label">🔍 Root Cause</div>
+        <div class="sz-val">${fd.root_cause || '—'}</div>
+      </div>
+      <div class="story-zone">
+        <div class="sz-label">⚡ Immediate Action</div>
+        <div class="sz-val">${fd.immediate_action || '—'}</div>
+      </div>
+      <div class="story-zone" style="border-bottom:none">
+        <div class="sz-label">🤖 Agents Used</div>
+        <div class="sz-val">${(inc.agents_used || []).map(a => `${agentIcons[a] || ''} ${a}`).join('<br>')}</div>
+      </div>
+      <div class="story-zone" style="border-bottom:none">
+        <div class="sz-label">📋 Preventive Measures</div>
+        <div class="sz-val" style="font-size:.72rem;color:var(--muted)">${(fd.preventive_measures || []).slice(0, 2).map(m => `• ${m}`).join('<br>') || '—'}</div>
+      </div>
+    </div>
+
+    <!-- Executed Actions (THE KEY SECTION) -->
+    <div style="padding:8px 14px;background:rgba(34,197,94,.04);border-top:1px solid rgba(34,197,94,.12)">
+      <div class="sz-label" style="margin-bottom:6px">✅ Actions Automatically Executed by AI</div>
+      ${actionsHtml}
+    </div>
+
+        <div class="cmd-list">
+            <div class="sz-label" style="margin-bottom:6px">🧪 Automatic Diagnostic Commands</div>
+            ${commandHtml}
+        </div>
+
+        <div class="timeline-list">
+            <div class="sz-label" style="margin-bottom:6px">🪜 Step-by-Step Incident Timeline</div>
+            ${timelineHtml}
+        </div>
+  </div>`;
+
+            area.insertAdjacentHTML('afterbegin', html);
+            // keep max 10 cards
+            const cards = area.querySelectorAll('.story-card');
+            if (cards.length > 10) cards[cards.length - 1].remove();
+
+            $('aiTag').style.display = 'inline-flex';
+            $('aiTag').textContent = '⚡ AI Active';
+        }
+
+        /* ═══ POLL ═══ */
+        function pollLogs() {
+            fetch('/api/logs?limit=80').then(r => r.json()).then(d => {
+                const lb = $('logBox');
+                lb.innerHTML = d.logs.map(l => {
+                    const cat = (l.match(/\[([A-Za-z]+\s*)\]/g) || []).map(x => x.replace(/[\[\]\s]/g, '')).join(' ');
+                    return `<div class="ll ${cat}">${l}</div>`;
+                }).join('');
+                lb.scrollTop = lb.scrollHeight;
+            }).catch(() => { });
+        }
+        pollLogs(); setInterval(pollLogs, 3000);
+
+        /* ═══ ACTIONS ═══ */
+        function sim(type) {
+            const url = type === 'overload'
+                ? '/api/simulate/overload'
+                : type === 'latency'
+                    ? '/api/simulate/latency'
+                    : '/api/simulate/attack';
+            const body = type === 'overload'
+                ? { count: 8 }
+                : type === 'latency'
+                    ? { count: 4, latency_ms: 1800 }
+                    : { count: 15 };
+            fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) }).catch(() => { });
+        }
+
+        async function bumpUsers(delta) {
+            try {
+                const st = await fetch('/api/state').then(r => r.json());
+                const cap = st.capacity || {};
+                const maxReject = Number(cap.max_reject || 15) + Number(delta || 0);
+                const maxNormal = Math.max(5, maxReject - 5);
+                await fetch('/api/config/capacity', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ max_normal: maxNormal, max_reject: maxReject })
+                });
+            } catch { }
+        }
+
+        async function showAiReport() {
+            try {
+                const r = await fetch('/api/ai/report').then(x => x.json());
+                const msg = [
+                    `Incidents: ${r.total_incidents}`,
+                    `Gemini Enriched: ${r.gemini_enriched}`,
+                    `Heuristic Only: ${r.heuristic_only}`,
+                    `Resolved: ${r.resolved}`,
+                    `Unresolved: ${r.unresolved}`,
+                    `Actions Executed: ${r.total_actions}`,
+                    `Commands Executed: ${r.total_commands}`,
+                    `Gemini Budget: ${r.gemini_budget?.used_today || 0}/${r.gemini_budget?.daily_limit || 0}`,
+                    `AI Skip Reasons: ${JSON.stringify(r.ai_skip_reasons || {})}`,
+                    `Agent Usage: ${JSON.stringify(r.agent_usage || {})}`,
+                ].join('\n');
+                alert(msg);
+            } catch {
+                alert('AI report unavailable right now.');
+            }
+        }
+        function doReset() {
+            fetch('/api/reset', { method: 'POST' }).then(() => {
+                $('feedArea').innerHTML = `<div class="empty-state">
+      <div class="empty-icon">🤖</div>
+      <div class="empty-title">System Reset</div>
+      <div class="empty-sub">All incidents cleared. Agents standing by.</div>
+    </div>`;
+                feedCount = 0; $('feedCountTag').textContent = '0 events';
+                $('aiTag').style.display = 'none';
+            }).catch(() => { });
+        }
+
+        async function refreshAiReportPanel() {
+            try {
+                const r = await fetch('/api/ai/report').then(x => x.json());
+                $('airInc').textContent = String(r.total_incidents || 0);
+                $('airGem').textContent = String(r.gemini_enriched || 0);
+                $('airHeu').textContent = String(r.heuristic_only || 0);
+                $('airAct').textContent = String(r.total_actions || 0);
+                $('airCmd').textContent = String(r.total_commands || 0);
+                const used = r.gemini_budget?.used_today || 0;
+                const lim = r.gemini_budget?.daily_limit || 0;
+                $('airBud').textContent = `${used}/${lim}`;
+                const reasons = JSON.stringify(r.ai_skip_reasons || {});
+                $('airNote').textContent = `Skip reasons: ${reasons}`;
+            } catch {
+                $('airNote').textContent = 'AI report fetch failed. Check /api/ai/report endpoint.';
+            }
+        }
+
+        refreshAiReportPanel();
+        setInterval(refreshAiReportPanel, 5000);
+    </script>
+</body>
+
+</html>

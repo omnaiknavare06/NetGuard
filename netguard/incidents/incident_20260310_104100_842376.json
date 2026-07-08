@@ -1,0 +1,170 @@
+{
+  "timestamp": "2026-03-10 10:41:00",
+  "alert": {
+    "reason": "High latency clients: cli_k12c30lf",
+    "conditions": [
+      "latency_high"
+    ],
+    "active": 1,
+    "max_capacity": 10,
+    "cpu_pct": 9.8,
+    "ram_pct": 20.4,
+    "failed_logins": 0,
+    "rpm": 0,
+    "bandwidth_bytes_s": 0,
+    "high_latency_clients": [
+      "cli_k12c30lf"
+    ],
+    "suspect_ips": [],
+    "timestamp": "2026-03-10 10:40:27"
+  },
+  "agents_used": [
+    "LatencyAgent"
+  ],
+  "agent_results": [
+    {
+      "agent": "LatencyAgent",
+      "alert_key": "latency_high",
+      "alert_reason": "High latency clients: cli_k12c30lf",
+      "severity": "Low",
+      "root_cause": "1 client (cli_k12c30lf) experiencing high latency. Likely isolated \u2014 heavy task or degraded network.",
+      "immediate_action": "Monitor the specific client. If persistent, ask client to retry with lighter tasks.",
+      "preventive_measures": [
+        "Set server-side timeout limits per task type.",
+        "Add latency-based session prioritization (deprioritize high-latency clients).",
+        "Profile task execution times and set SLO budgets.",
+        "Implement heartbeat timeouts to detect and evict stale sessions."
+      ],
+      "confidence": "Heuristic",
+      "resolved": true,
+      "escalation_needed": false,
+      "ai_meta": {
+        "api_key_present": true,
+        "cache_hit": true,
+        "attempted": false,
+        "used": false,
+        "source": "cache",
+        "skip_reason": "cache_ttl_active",
+        "error": ""
+      },
+      "timestamp": "2026-03-10 10:39:45"
+    }
+  ],
+  "executed_actions": [
+    {
+      "action_type": "throttle_clients",
+      "description": "Slow-response clients deprioritized",
+      "detail": "",
+      "agent": "LatencyAgent",
+      "timestamp": "2026-03-10 10:40:27",
+      "status": "executed",
+      "result": "Throttled 0 degraded client sessions."
+    },
+    {
+      "action_type": "alert_cleared",
+      "description": "Latency watchdog reset \u2014 monitoring response times",
+      "detail": "",
+      "agent": "LatencyAgent",
+      "timestamp": "2026-03-10 10:40:27",
+      "status": "executed",
+      "result": "Alert condition resolved. System returning to normal."
+    }
+  ],
+  "command_runs": [
+    {
+      "agent": "LatencyAgent",
+      "alert_key": "latency_high",
+      "timestamp": "2026-03-10 10:40:42",
+      "target": "8.8.8.8",
+      "status": "ok",
+      "command": "ping",
+      "cmd_string": "ping -n 4 8.8.8.8",
+      "output": "Pinging 8.8.8.8 with 32 bytes of data:\nRequest timed out.\nRequest timed out.\nReply from 10.20.8.159: Destination host unreachable.\nRequest timed out.\n\nPing statistics for 8.8.8.8:\n    Packets: Sent = 4, Received = 1, Lost = 3 (75% loss),",
+      "output_lines": [
+        "Pinging 8.8.8.8 with 32 bytes of data:",
+        "Request timed out.",
+        "Request timed out.",
+        "Reply from 10.20.8.159: Destination host unreachable.",
+        "Request timed out.",
+        "",
+        "Ping statistics for 8.8.8.8:",
+        "    Packets: Sent = 4, Received = 1, Lost = 3 (75% loss),"
+      ],
+      "output_preview": "Pinging 8.8.8.8 with 32 bytes of data:\nRequest timed out.\nRequest timed out.\nReply from 10.20.8.159: Destination host unreachable.\nRequest timed out.\n"
+    },
+    {
+      "agent": "LatencyAgent",
+      "alert_key": "latency_high",
+      "timestamp": "2026-03-10 10:41:00",
+      "target": "8.8.8.8",
+      "status": "ok",
+      "command": "traceroute",
+      "cmd_string": "tracert -h 10 8.8.8.8",
+      "output": "Tracing route to 8.8.8.8 over a maximum of 10 hops\n\n  1     *        *     10.20.8.159  reports: Destination host unreachable.\n\nTrace complete.",
+      "output_lines": [
+        "Tracing route to 8.8.8.8 over a maximum of 10 hops",
+        "",
+        "  1     *        *     10.20.8.159  reports: Destination host unreachable.",
+        "",
+        "Trace complete."
+      ],
+      "output_preview": "Tracing route to 8.8.8.8 over a maximum of 10 hops\n\n  1     *        *     10.20.8.159  reports: Destination host unreachable.\n\nTrace complete."
+    }
+  ],
+  "timeline": [
+    {
+      "step": "alert_detected",
+      "status": "ok",
+      "detail": "Monitor raised conditions: latency_high",
+      "timestamp": "10:40:27"
+    },
+    {
+      "step": "agent_started",
+      "status": "running",
+      "detail": "LatencyAgent started for latency_high",
+      "timestamp": "10:40:27"
+    },
+    {
+      "step": "agent_result",
+      "status": "ok",
+      "detail": "LatencyAgent -> Low (Heuristic)",
+      "timestamp": "10:40:27"
+    },
+    {
+      "step": "actions_executed",
+      "status": "ok",
+      "detail": "2 action(s) executed for latency_high",
+      "timestamp": "10:40:27"
+    },
+    {
+      "step": "diagnostics_executed",
+      "status": "ok",
+      "detail": "2 diagnostic command(s) executed for latency_high",
+      "timestamp": "10:41:00"
+    }
+  ],
+  "ai_summary": {
+    "gemini_used": 0,
+    "heuristic_only": 1
+  },
+  "final_diagnosis": {
+    "primary_agent": "LatencyAgent",
+    "root_cause": "1 client (cli_k12c30lf) experiencing high latency. Likely isolated \u2014 heavy task or degraded network.",
+    "severity": "Low",
+    "immediate_action": "Monitor the specific client. If persistent, ask client to retry with lighter tasks.",
+    "preventive_measures": [
+      "Set server-side timeout limits per task type.",
+      "Add latency-based session prioritization (deprioritize high-latency clients).",
+      "Profile task execution times and set SLO budgets.",
+      "Implement heartbeat timeouts to detect and evict stale sessions."
+    ],
+    "confidence": "Heuristic",
+    "resolved": true,
+    "escalation_needed": false
+  },
+  "resolved": true,
+  "total_agents": 1,
+  "total_actions": 2,
+  "total_commands": 2,
+  "incident_id": 15
+}

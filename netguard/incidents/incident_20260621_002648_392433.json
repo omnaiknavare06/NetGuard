@@ -1,0 +1,175 @@
+{
+  "timestamp": "2026-06-21 00:26:48",
+  "alert": {
+    "reason": "High latency clients: cli_tljjkjyk",
+    "conditions": [
+      "latency_high"
+    ],
+    "active": 1,
+    "max_capacity": 6,
+    "cpu_pct": 9.8,
+    "ram_pct": 20.4,
+    "failed_logins": 0,
+    "rpm": 0,
+    "bandwidth_bytes_s": 0,
+    "high_latency_clients": [
+      "cli_tljjkjyk"
+    ],
+    "suspect_ips": [
+      "127.0.0.1"
+    ],
+    "timestamp": "2026-06-21 00:26:45"
+  },
+  "agents_used": [
+    "LatencyAgent"
+  ],
+  "agent_results": [
+    {
+      "agent": "LatencyAgent",
+      "alert_key": "latency_high",
+      "alert_reason": "High latency clients: cli_tljjkjyk",
+      "severity": "Low",
+      "root_cause": "1 client (cli_tljjkjyk) experiencing high latency. Likely isolated \u2014 heavy task or degraded network.",
+      "immediate_action": "Monitor the specific client. If persistent, ask client to retry with lighter tasks.",
+      "preventive_measures": [
+        "Set server-side timeout limits per task type.",
+        "Add latency-based session prioritization (deprioritize high-latency clients).",
+        "Profile task execution times and set SLO budgets.",
+        "Implement heartbeat timeouts to detect and evict stale sessions."
+      ],
+      "confidence": "Heuristic",
+      "resolved": true,
+      "escalation_needed": false,
+      "ai_meta": {
+        "api_key_present": true,
+        "cache_hit": true,
+        "attempted": false,
+        "used": false,
+        "source": "cache",
+        "skip_reason": "cache_ttl_active",
+        "error": ""
+      },
+      "timestamp": "2026-06-21 00:26:15"
+    }
+  ],
+  "executed_actions": [
+    {
+      "action_type": "throttle_clients",
+      "description": "Slow-response clients deprioritized",
+      "detail": "",
+      "agent": "LatencyAgent",
+      "timestamp": "2026-06-21 00:26:45",
+      "status": "executed",
+      "result": "Throttled 0 degraded client sessions."
+    },
+    {
+      "action_type": "alert_cleared",
+      "description": "Latency watchdog reset \u2014 monitoring response times",
+      "detail": "",
+      "agent": "LatencyAgent",
+      "timestamp": "2026-06-21 00:26:45",
+      "status": "executed",
+      "result": "Alert condition resolved. System returning to normal."
+    }
+  ],
+  "command_runs": [
+    {
+      "agent": "LatencyAgent",
+      "alert_key": "latency_high",
+      "timestamp": "2026-06-21 00:26:48",
+      "target": "127.0.0.1",
+      "status": "ok",
+      "command": "ping",
+      "cmd_string": "ping -n 4 127.0.0.1",
+      "output": "Pinging 127.0.0.1 with 32 bytes of data:\nReply from 127.0.0.1: bytes=32 time<1ms TTL=128\nReply from 127.0.0.1: bytes=32 time<1ms TTL=128\nReply from 127.0.0.1: bytes=32 time<1ms TTL=128\nReply from 127.0.0.1: bytes=32 time<1ms TTL=128\n\nPing statistics for 127.0.0.1:\n    Packets: Sent = 4, Received = 4, Lost = 0 (0% loss),\nApproximate round trip times in milli-seconds:\n    Minimum = 0ms, Maximum = 0ms, Average = 0ms",
+      "output_lines": [
+        "Pinging 127.0.0.1 with 32 bytes of data:",
+        "Reply from 127.0.0.1: bytes=32 time<1ms TTL=128",
+        "Reply from 127.0.0.1: bytes=32 time<1ms TTL=128",
+        "Reply from 127.0.0.1: bytes=32 time<1ms TTL=128",
+        "Reply from 127.0.0.1: bytes=32 time<1ms TTL=128",
+        "",
+        "Ping statistics for 127.0.0.1:",
+        "    Packets: Sent = 4, Received = 4, Lost = 0 (0% loss),",
+        "Approximate round trip times in milli-seconds:",
+        "    Minimum = 0ms, Maximum = 0ms, Average = 0ms"
+      ],
+      "output_preview": "Pinging 127.0.0.1 with 32 bytes of data:\nReply from 127.0.0.1: bytes=32 time<1ms TTL=128\nReply from 127.0.0.1: bytes=32 time<1ms TTL=128\nReply from 127.0.0.1: bytes=32 time<1ms TTL=128\nReply from 127.0.0.1: bytes=32 time<1ms TTL=128\n"
+    },
+    {
+      "agent": "LatencyAgent",
+      "alert_key": "latency_high",
+      "timestamp": "2026-06-21 00:26:48",
+      "target": "127.0.0.1",
+      "status": "ok",
+      "command": "traceroute",
+      "cmd_string": "tracert -h 10 127.0.0.1",
+      "output": "Tracing route to LAPTOP-8T9Q94RD [127.0.0.1]\nover a maximum of 10 hops:\n\n  1    <1 ms    <1 ms    <1 ms  LAPTOP-8T9Q94RD [127.0.0.1] \n\nTrace complete.",
+      "output_lines": [
+        "Tracing route to LAPTOP-8T9Q94RD [127.0.0.1]",
+        "over a maximum of 10 hops:",
+        "",
+        "  1    <1 ms    <1 ms    <1 ms  LAPTOP-8T9Q94RD [127.0.0.1] ",
+        "",
+        "Trace complete."
+      ],
+      "output_preview": "Tracing route to LAPTOP-8T9Q94RD [127.0.0.1]\nover a maximum of 10 hops:\n\n  1    <1 ms    <1 ms    <1 ms  LAPTOP-8T9Q94RD [127.0.0.1] \n\nTrace complete."
+    }
+  ],
+  "timeline": [
+    {
+      "step": "alert_detected",
+      "status": "ok",
+      "detail": "Monitor raised conditions: latency_high",
+      "timestamp": "00:26:45"
+    },
+    {
+      "step": "agent_started",
+      "status": "running",
+      "detail": "LatencyAgent started for latency_high",
+      "timestamp": "00:26:45"
+    },
+    {
+      "step": "agent_result",
+      "status": "ok",
+      "detail": "LatencyAgent -> Low (Heuristic)",
+      "timestamp": "00:26:45"
+    },
+    {
+      "step": "actions_executed",
+      "status": "ok",
+      "detail": "2 action(s) executed for latency_high",
+      "timestamp": "00:26:45"
+    },
+    {
+      "step": "diagnostics_executed",
+      "status": "ok",
+      "detail": "2 diagnostic command(s) executed for latency_high",
+      "timestamp": "00:26:48"
+    }
+  ],
+  "ai_summary": {
+    "gemini_used": 0,
+    "heuristic_only": 1
+  },
+  "final_diagnosis": {
+    "primary_agent": "LatencyAgent",
+    "root_cause": "1 client (cli_tljjkjyk) experiencing high latency. Likely isolated \u2014 heavy task or degraded network.",
+    "severity": "Low",
+    "immediate_action": "Monitor the specific client. If persistent, ask client to retry with lighter tasks.",
+    "preventive_measures": [
+      "Set server-side timeout limits per task type.",
+      "Add latency-based session prioritization (deprioritize high-latency clients).",
+      "Profile task execution times and set SLO budgets.",
+      "Implement heartbeat timeouts to detect and evict stale sessions."
+    ],
+    "confidence": "Heuristic",
+    "resolved": true,
+    "escalation_needed": false
+  },
+  "resolved": true,
+  "total_agents": 1,
+  "total_actions": 2,
+  "total_commands": 2,
+  "incident_id": 43
+}

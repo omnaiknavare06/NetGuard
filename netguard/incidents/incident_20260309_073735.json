@@ -1,0 +1,65 @@
+{
+  "timestamp": "2026-03-09 07:37:35",
+  "alert": {
+    "reason": "High failed login count (10 attempts) | Server in DEGRADED mode (15/14 sessions) | Server CRITICAL - rejecting new connections",
+    "conditions": [
+      "failed_login",
+      "capacity_degrade",
+      "capacity_critical"
+    ],
+    "active": 15,
+    "max_capacity": 10,
+    "cpu_pct": 35.0,
+    "ram_pct": 54.0,
+    "failed_logins": 10,
+    "rpm": 0,
+    "bandwidth_bytes_s": 0,
+    "high_latency_clients": [],
+    "timestamp": "2026-03-09 07:37:28"
+  },
+  "iterations": [
+    {
+      "iteration": 1,
+      "command": "netstat",
+      "target": "8.8.8.8",
+      "cmd_string": "netstat -an",
+      "cmd_output": "Active Connections\n\n  Proto  Local Address          Foreign Address        State\n  TCP    0.0.0.0:7              0.0.0.0:0              LISTENING\n  TCP    0.0.0.0:9              0.0.0.0:0              LISTENING\n  TCP    0.0.0.0:13             0.0.0.0:0              LISTENING\n  TCP    0.0.0.0:17             0.0.0.0:0              LISTENING\n  TCP    0.0.0.0:19             0.0.0.0:0              LISTENING\n  TCP    0.0.0.0:135            0.0.0.0:0              LISTENING\n  TCP    0.0.0.0:445            0.0.0.0:0              LISTENING\n  TCP    0.0.0.0:1801           0.0.0.0:0              LISTENING\n  TCP    0.0.0.0:2103           0.0.0.0:0              LISTENING\n  TCP    0.0.0.0:2105           0.0.0.0:0              LISTENING\n  TCP    0.0.0.0:2107           0.0.0.0:0              LISTENING\n  TCP    0.0.0.0:2869           0.0.0.0:0              LISTENING\n  TCP    0.0.0.0:3307           0.0.0.0:0              LISTENING\n  TCP    0.0.0.0:5000           0.0.0.0:0              LISTENING\n  TCP    0.0.0.0:5000           0.0.0.0:0              LISTENING\n  TCP    0.0.0.0:5040           0.0.0.0:0              LISTENING\n  TCP    0.0.0.0:5500           0.0.0.0:0              LISTENING\n  TCP    0.0.0.0:7250           0.0.0.0:0              LISTENING\n  TCP    0.0.0.0:7393           0.0.0.0:0              LISTENING\n  TCP    0.0.0.0:7680           0.0.0.0:0              LISTENING\n  TCP    0.0.0.0:26769          0.0.0.0:0              LISTENING\n  TCP    0.0.0.0:26770          0.0.0.0:0              LISTENING\n  TCP    0.0.0.0:33060          0.0.0.0:0              LISTENING\n  TCP    0.0.0.0:49664          0.0.0.0:0              LISTENING\n  TCP    0.0.0.0:49665          0.0.0.0:0              LISTENING\n  TCP    0.0.0.0:49666          0.0.0.0:0              LISTENING\n  TCP    0.0.0.0:49667          0.0.0.0:0              LISTENING\n  TCP    0.0.0.0:49668          0.0.0.0:0              LISTENING\n  TCP    0.0.0.0:49670          0.0.0.0:0              LISTENING\n  TCP    0.0.0.0:49678          0.0.0.0:0              LISTENING\n  TCP    0.0.0.0:55752          0.0.0.0:0              LISTENING\n  TCP    0.0.0.0:65001          0.0.0.0:0              LISTENING\n  TCP    127.0.0.1:5000         127.0.0.1:50288        TIME_WAIT\n  TCP    127.0.0.1:5000         127.0.0.1:50519        TIME_WAIT\n  TCP    127.0.0.1:5000         127.0.0.1:53879        TIME_WAIT\n  TCP    127.0.0.1:5000         127.0.0.1:56582        TIME_WAIT\n  TCP    127.0.0.1:5000         127.0.0.1:59460        TIME_WAIT\n  TCP    127.0.0.1:5000         127.0.0.1:59820        TIME_WAIT\n  TCP    127.0.0.1:5000         127.0.0.1:61883        TIME_WAIT\n  TCP    127.0.0.1:5000         127.0.0.1:65046        TIME_WAIT\n  TCP    127.0.0.1:9222         127.0.0.1:51594        TIME_WAIT\n  TCP    127.0.0.1:9222         127.0.0.1:51595        TIME_WAIT\n  TCP    127.0.0.1:9222         127.0.0.1:59101        TIME_WAIT\n  TCP    127.0.0.1:9222         127.0.0.1:59409        TIME_WAIT\n  TCP    127.0.0.1:9222         127.0.0.1:64688        TIME_WAIT\n  TCP    127.0.0.1:49400        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:49671        127.0.0.1:49672        ESTABLISHED\n  TCP    127.0.0.1:49672        127.0.0.1:49671        ESTABLISHED\n  TCP    127.0.0.1:49673        127.0.0.1:49674        ESTABLISHED\n  TCP    127.0.0.1:49674        127.0.0.1:49673        ESTABLISHED\n  TCP    127.0.0.1:49676        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:49898        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:49934        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:49959        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:50726        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:50900        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:50990        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:51138        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:51465        127.0.0.1:5000         TIME_WAIT\n  TCP    127.0.0.1:51564        127.0.0.1:5000         TIME_WAIT\n  TCP    12",
+      "suggestion": {
+        "command": "netstat",
+        "target": "8.8.8.8",
+        "reason": "Local heuristic selected a safe diagnostic command.",
+        "suspected_issue": "High failed login count (10 attempts) | Server in DEGRADED mode (15/14 sessions) | Server CRITICAL - rejecting new connections",
+        "risk_level": "Medium"
+      },
+      "diagnosis": {
+        "root_cause": "High failed login count (10 attempts) | Server in DEGRADED mode (15/14 sessions) | Server CRITICAL - rejecting new connections",
+        "explanation": "Local analysis used the alert context plus 'netstat' output to estimate likely pressure points.",
+        "severity": "High",
+        "resolved": true,
+        "immediate_action": "Review the current sessions and reduce heavy traffic or block suspicious sources.",
+        "preventive_measures": [
+          "Enable lockouts or fail2ban-style blocking.",
+          "Add MFA for privileged access.",
+          "Monitor suspicious source IPs on the edge firewall."
+        ],
+        "escalation_needed": false
+      }
+    }
+  ],
+  "final_diagnosis": {
+    "root_cause": "High failed login count (10 attempts) | Server in DEGRADED mode (15/14 sessions) | Server CRITICAL - rejecting new connections",
+    "explanation": "Local analysis used the alert context plus 'netstat' output to estimate likely pressure points.",
+    "severity": "High",
+    "resolved": true,
+    "immediate_action": "Review the current sessions and reduce heavy traffic or block suspicious sources.",
+    "preventive_measures": [
+      "Enable lockouts or fail2ban-style blocking.",
+      "Add MFA for privileged access.",
+      "Monitor suspicious source IPs on the edge firewall."
+    ],
+    "escalation_needed": false
+  },
+  "resolved": true,
+  "total_iterations": 1,
+  "incident_id": 2
+}

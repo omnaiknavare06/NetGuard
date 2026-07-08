@@ -1,0 +1,971 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>NetGuard AI — Server Stress Tester</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet" />
+    <style>
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0
+        }
+
+        :root {
+            --bg: #080b14;
+            --card: #0f1320;
+            --card2: #141826;
+            --border: rgba(255, 255, 255, .07);
+            --text: #dde3ef;
+            --muted: #6b7799;
+            --green: #22c55e;
+            --yellow: #f59e0b;
+            --red: #ef4444;
+            --blue: #3b82f6;
+            --purple: #a855f7;
+            --cyan: #06b6d4;
+            --r: 12px;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center
+        }
+
+        header {
+            width: 100%;
+            padding: 13px 28px;
+            border-bottom: 1px solid var(--border);
+            background: rgba(8, 11, 20, .95);
+            backdrop-filter: blur(12px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: space-between
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 800;
+            font-size: .95rem
+        }
+
+        .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--muted);
+            transition: all .4s
+        }
+
+        .dot.on {
+            background: var(--green);
+            box-shadow: 0 0 8px var(--green)
+        }
+
+        a.back {
+            color: var(--muted);
+            text-decoration: none;
+            font-size: .8rem
+        }
+
+        a.back:hover {
+            color: var(--text)
+        }
+
+        .shell {
+            width: 100%;
+            max-width: 960px;
+            padding: 20px 16px 80px;
+            display: grid;
+            gap: 14px
+        }
+
+        /* === CARDS === */
+        .card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--r);
+            padding: 18px
+        }
+
+        .card-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 14px
+        }
+
+        .card-title {
+            font-size: .85rem;
+            font-weight: 700
+        }
+
+        .tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            font-size: .68rem;
+            font-weight: 600;
+            padding: 3px 8px;
+            border-radius: 99px;
+            border: 1px solid transparent;
+            white-space: nowrap
+        }
+
+        .tag.green {
+            background: rgba(34, 197, 94, .12);
+            color: var(--green);
+            border-color: rgba(34, 197, 94, .25)
+        }
+
+        .tag.yellow {
+            background: rgba(245, 158, 11, .12);
+            color: var(--yellow);
+            border-color: rgba(245, 158, 11, .25)
+        }
+
+        .tag.red {
+            background: rgba(239, 68, 68, .12);
+            color: var(--red);
+            border-color: rgba(239, 68, 68, .25)
+        }
+
+        .tag.blue {
+            background: rgba(59, 130, 246, .12);
+            color: var(--blue);
+            border-color: rgba(59, 130, 246, .25)
+        }
+
+        .tag.purple {
+            background: rgba(168, 85, 247, .12);
+            color: var(--purple);
+            border-color: rgba(168, 85, 247, .25)
+        }
+
+        .tag.muted {
+            background: rgba(255, 255, 255, .05);
+            color: var(--muted)
+        }
+
+        /* === CONN === */
+        .conn-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 14px
+        }
+
+        .info-box {
+            background: rgba(255, 255, 255, .04);
+            border-radius: 8px;
+            padding: 10px 14px
+        }
+
+        .info-box label {
+            font-size: .62rem;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: .07em;
+            display: block
+        }
+
+        .info-box span {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: .8rem;
+            margin-top: 4px;
+            display: block;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap
+        }
+
+        /* === STAT BAR === */
+        .stat-bar {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            margin-bottom: 14px
+        }
+
+        .stat {
+            background: rgba(255, 255, 255, .04);
+            border-radius: 8px;
+            padding: 10px;
+            text-align: center
+        }
+
+        .stat label {
+            font-size: .6rem;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: .06em;
+            display: block
+        }
+
+        .stat span {
+            font-size: 1.1rem;
+            font-weight: 800;
+            margin-top: 4px;
+            display: block
+        }
+
+        /* === MAIN BTN === */
+        .main-btn {
+            width: 100%;
+            padding: 13px;
+            border-radius: 9px;
+            border: 1px solid rgba(34, 197, 94, .35);
+            background: rgba(34, 197, 94, .12);
+            color: var(--green);
+            font: 700 .95rem 'Inter', sans-serif;
+            cursor: pointer;
+            transition: all .18s
+        }
+
+        .main-btn:hover:not(:disabled) {
+            background: rgba(34, 197, 94, .22)
+        }
+
+        .main-btn.disc {
+            border-color: rgba(239, 68, 68, .35);
+            background: rgba(239, 68, 68, .10);
+            color: var(--red)
+        }
+
+        .main-btn.disc:hover:not(:disabled) {
+            background: rgba(239, 68, 68, .2)
+        }
+
+        .main-btn:disabled {
+            opacity: .35;
+            cursor: not-allowed
+        }
+
+        /* === DEMO BTN — the big star === */
+        .demo-btn {
+            width: 100%;
+            padding: 16px;
+            border-radius: 9px;
+            border: 1px solid rgba(168, 85, 247, .4);
+            background: linear-gradient(135deg, rgba(168, 85, 247, .15), rgba(59, 130, 246, .1));
+            color: var(--purple);
+            font: 700 1rem 'Inter', sans-serif;
+            cursor: pointer;
+            transition: all .2s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .demo-btn:hover:not(:disabled) {
+            background: linear-gradient(135deg, rgba(168, 85, 247, .25), rgba(59, 130, 246, .18));
+            box-shadow: 0 0 24px rgba(168, 85, 247, .2);
+        }
+
+        .demo-btn:disabled {
+            opacity: .5;
+            cursor: not-allowed
+        }
+
+        .demo-btn .demo-sub {
+            font-size: .72rem;
+            font-weight: 500;
+            color: var(--muted);
+            display: block;
+            margin-top: 3px
+        }
+
+        /* === DEMO PROGRESS BAR === */
+        #demoProgress {
+            display: none;
+            margin-top: 10px;
+            background: rgba(168, 85, 247, .1);
+            border: 1px solid rgba(168, 85, 247, .2);
+            border-radius: 8px;
+            padding: 12px 14px
+        }
+
+        .dp-label {
+            font-size: .78rem;
+            font-weight: 600;
+            color: var(--purple);
+            margin-bottom: 8px
+        }
+
+        .dp-bar-wrap {
+            background: rgba(255, 255, 255, .06);
+            border-radius: 99px;
+            height: 6px;
+            overflow: hidden;
+            margin-bottom: 8px
+        }
+
+        .dp-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--purple), var(--blue));
+            border-radius: 99px;
+            transition: width .4s;
+            width: 0%
+        }
+
+        .dp-step {
+            font-size: .72rem;
+            color: var(--muted);
+            font-family: 'JetBrains Mono', monospace
+        }
+
+        /* === DIVIDER === */
+        .divider {
+            font-size: .65rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: .1em;
+            color: var(--muted);
+            margin: 14px 0 10px;
+            padding-bottom: 6px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 8px
+        }
+
+        .divider .taglet {
+            background: rgba(255, 255, 255, .05);
+            color: var(--muted);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: .6rem;
+            font-weight: 600;
+            letter-spacing: .04em
+        }
+
+        /* === TASK GRID === */
+        .task-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 8px
+        }
+
+        .task-btn {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            padding: 10px 12px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            background: rgba(255, 255, 255, .03);
+            color: var(--text);
+            font: inherit;
+            cursor: pointer;
+            transition: all .16s;
+            text-align: left
+        }
+
+        .task-btn:hover:not(:disabled) {
+            background: rgba(255, 255, 255, .07);
+            border-color: rgba(255, 255, 255, .14)
+        }
+
+        .task-btn:disabled {
+            opacity: .3;
+            cursor: not-allowed
+        }
+
+        .task-btn strong {
+            font-size: .78rem;
+            font-weight: 700
+        }
+
+        .task-btn small {
+            font-size: .62rem;
+            color: var(--muted);
+            margin-top: 2px
+        }
+
+        .task-btn.warn {
+            border-color: rgba(245, 158, 11, .25)
+        }
+
+        .task-btn.warn:hover:not(:disabled) {
+            background: rgba(245, 158, 11, .07)
+        }
+
+        .task-btn.danger {
+            border-color: rgba(239, 68, 68, .25)
+        }
+
+        .task-btn.danger:hover:not(:disabled) {
+            background: rgba(239, 68, 68, .07)
+        }
+
+        .task-btn.f2 {
+            grid-column: span 2
+        }
+
+        .task-btn.f3 {
+            grid-column: span 3
+        }
+
+        .task-btn.f5 {
+            grid-column: span 5
+        }
+
+        /* === STRESS MODES === */
+        .stress-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px
+        }
+
+        .stress-btn {
+            padding: 10px 14px;
+            border-radius: 8px;
+            border: 1px solid rgba(59, 130, 246, .25);
+            background: rgba(59, 130, 246, .07);
+            color: var(--blue);
+            font: .8rem 'Inter', sans-serif;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all .16s
+        }
+
+        .stress-btn:hover:not(:disabled) {
+            background: rgba(59, 130, 246, .15)
+        }
+
+        .stress-btn:disabled {
+            opacity: .35;
+            cursor: not-allowed
+        }
+
+        .stop-btn {
+            border-color: rgba(239, 68, 68, .3);
+            background: rgba(239, 68, 68, .07);
+            color: var(--red)
+        }
+
+        .stop-btn:hover:not(:disabled) {
+            background: rgba(239, 68, 68, .15)
+        }
+
+        /* === FEED === */
+        .feed {
+            background: #060810;
+            border-radius: 8px;
+            padding: 10px;
+            height: 280px;
+            overflow-y: auto;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: .72rem;
+            line-height: 1.75
+        }
+
+        .entry {
+            padding: 3px 8px;
+            border-left: 2px solid transparent;
+            border-radius: 4px;
+            margin-bottom: 2px
+        }
+
+        .entry.ok {
+            border-color: var(--green)
+        }
+
+        .entry.error {
+            border-color: var(--red);
+            color: #f87171
+        }
+
+        .entry.warn {
+            border-color: var(--yellow);
+            color: #fbbf24
+        }
+
+        .entry.info {
+            color: var(--muted)
+        }
+
+        .entry.demo {
+            border-color: var(--purple);
+            color: #c084fc
+        }
+
+        /* === PAYLOAD === */
+        .payload {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: .7rem;
+            background: #060810;
+            border-radius: 8px;
+            padding: 10px;
+            max-height: 120px;
+            overflow-y: auto;
+            color: var(--muted);
+            white-space: pre-wrap;
+            word-break: break-all;
+            margin-top: 10px
+        }
+
+        ::-webkit-scrollbar {
+            width: 4px
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, .1);
+            border-radius: 99px
+        }
+
+        @media(max-width:640px) {
+            .task-grid {
+                grid-template-columns: repeat(3, 1fr)
+            }
+
+            .task-btn.f2 {
+                grid-column: auto
+            }
+
+            .task-btn.f3 {
+                grid-column: span 3
+            }
+
+            .conn-grid {
+                grid-template-columns: 1fr
+            }
+
+            .stat-bar {
+                grid-template-columns: repeat(2, 1fr)
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <div class="brand">
+            <div class="dot" id="dot"></div>NetGuard — Server Stress Tester
+        </div>
+        <a class="back" href="/">← Admin Dashboard</a>
+    </header>
+
+    <div class="shell">
+
+        <!-- CONNECTION CARD -->
+        <div class="card">
+            <div class="card-head"><span class="card-title">Connection</span><span class="tag muted"
+                    id="connTag">Disconnected</span></div>
+            <div class="conn-grid">
+                <div class="info-box"><label>Client ID</label><span id="cidBox">—</span></div>
+                <div class="info-box"><label>Server Status</label><span id="statusBox">Not connected</span></div>
+            </div>
+            <button class="main-btn" id="connBtn" onclick="toggleConn()">Connect to Server</button>
+        </div>
+
+        <!-- FULL DEMO MODE — the star of the show -->
+        <div class="card"
+            style="border-color:rgba(168,85,247,.25);background:linear-gradient(135deg,rgba(168,85,247,.04),rgba(8,11,20,1))">
+            <div class="card-head">
+                <span class="card-title">🎓 AI Demo Mode</span>
+                <span class="tag purple">Teacher Demo</span>
+            </div>
+            <p style="font-size:.8rem;color:var(--muted);margin-bottom:12px;line-height:1.6">
+                Runs a complete scripted sequence that activates <strong style="color:var(--text)">all 4 AI
+                    agents</strong>:
+                SecurityAgent, CapacityAgent, PerformanceAgent, and LatencyAgent.
+                Watch the Admin Dashboard to see real-time AI analysis and incident reports.
+            </p>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;font-size:.75rem">
+                <div style="background:rgba(255,255,255,.04);border-radius:7px;padding:10px">
+                    🛡️ <strong>SecurityAgent</strong><br><span style="color:var(--muted);font-size:.7rem">Brute force
+                        detection</span>
+                </div>
+                <div style="background:rgba(255,255,255,.04);border-radius:7px;padding:10px">
+                    ⚙️ <strong>CapacityAgent</strong><br><span style="color:var(--muted);font-size:.7rem">Server
+                        overload handling</span>
+                </div>
+                <div style="background:rgba(255,255,255,.04);border-radius:7px;padding:10px">
+                    📊 <strong>PerformanceAgent</strong><br><span
+                        style="color:var(--muted);font-size:.7rem">CPU/RAM/bandwidth analysis</span>
+                </div>
+                <div style="background:rgba(255,255,255,.04);border-radius:7px;padding:10px">
+                    ⏱️ <strong>LatencyAgent</strong><br><span style="color:var(--muted);font-size:.7rem">Response time
+                        monitoring</span>
+                </div>
+            </div>
+            <button class="demo-btn" id="demoBtn" disabled onclick="runFullDemo()">
+                🚀 Run Full AI Demo
+                <span class="demo-sub">Connect to server first, then click to start automated demo</span>
+            </button>
+            <div id="demoProgress">
+                <div class="dp-label" id="demoStepLabel">Starting…</div>
+                <div class="dp-bar-wrap">
+                    <div class="dp-bar" id="dpBar"></div>
+                </div>
+                <div class="dp-step" id="demoStepDetail">—</div>
+            </div>
+        </div>
+
+        <!-- STATS + INDIVIDUAL TASKS -->
+        <div class="card">
+            <div class="card-head"><span class="card-title">Individual Tasks</span><span class="tag muted"
+                    id="taskTag">Idle</span></div>
+
+            <div class="stat-bar">
+                <div class="stat"><label>Latency</label><span id="sLat">—</span></div>
+                <div class="stat"><label>Overload ×</label><span id="sOvl">—</span></div>
+                <div class="stat"><label>Status</label><span id="sStat">—</span></div>
+                <div class="stat"><label>Task</label><span id="sTask">—</span></div>
+            </div>
+
+            <div class="divider">Normal Tasks <span class="taglet">Low–Med Impact</span></div>
+            <div class="task-grid">
+                <button class="task-btn" disabled id="tb-login"
+                    onclick="run('login')"><strong>Login</strong><small>Auth, low load</small></button>
+                <button class="task-btn" disabled id="tb-logout"
+                    onclick="run('logout')"><strong>Logout</strong><small>Low load</small></button>
+                <button class="task-btn" disabled id="tb-heartbeat"
+                    onclick="run('heartbeat')"><strong>Heartbeat</strong><small>Minimal load</small></button>
+                <button class="task-btn" disabled id="tb-search"
+                    onclick="run('search')"><strong>Search</strong><small>Med CPU</small></button>
+                <button class="task-btn" disabled id="tb-db_query" onclick="run('db_query')"><strong>DB
+                        Query</strong><small>CPU + RAM</small></button>
+                <button class="task-btn" disabled id="tb-file_download" onclick="run('file_download')"><strong>File
+                        Download</strong><small>500 KB</small></button>
+                <button class="task-btn warn" disabled id="tb-file_upload" onclick="run('file_upload')"><strong>File
+                        Upload</strong><small>5 MB, high RAM</small></button>
+                <button class="task-btn warn" disabled id="tb-compute"
+                    onclick="run('compute')"><strong>Compute</strong><small>High CPU</small></button>
+                <button class="task-btn warn" disabled id="tb-stream"
+                    onclick="run('stream')"><strong>Stream</strong><small>High BW</small></button>
+                <button class="task-btn danger f2" disabled id="tb-bulk_process"
+                    onclick="run('bulk_process')"><strong>Bulk Process</strong><small>Critical — may trigger
+                        alerts</small></button>
+            </div>
+
+            <div class="divider" style="margin-top:14px">Security Tests <span class="taglet">Triggers
+                    SecurityAgent</span></div>
+            <div class="task-grid">
+                <button class="task-btn warn f2" disabled onclick="run('login',{success:false})"><strong>Failed
+                        Login</strong><small>Triggers auth pressure</small></button>
+                <button class="task-btn danger f3" disabled id="tb-brute" onclick="bruteForce()"><strong>Brute Force
+                        ×10</strong><small>10 failed logins → SecurityAgent activates</small></button>
+            </div>
+
+            <div class="divider" style="margin-top:14px">Stress Modes <span class="taglet">Triggers Multiple
+                    Agents</span></div>
+            <div class="stress-grid">
+                <button class="stress-btn" disabled id="sb-rapid" onclick="stressMode('rapid')">🔥 Rapid
+                    Fire<br><small>20 mixed tasks back-to-back</small></button>
+                <button class="stress-btn" disabled id="sb-ramp" onclick="stressMode('ramp')">📈 Ramp
+                    Up<br><small>Escalate every 2s to overload</small></button>
+                <button class="stress-btn" disabled id="sb-maxload" onclick="stressMode('maxload')">💣 Max
+                    Load<br><small>All heavy tasks — triggers PerformanceAgent</small></button>
+                <button class="stress-btn" disabled id="sb-continuous" onclick="stressMode('continuous')">⏱️
+                    Continuous<br><small>Heartbeat every 1s until stopped</small></button>
+            </div>
+            <div style="margin-top:8px">
+                <button class="stress-btn stop-btn" onclick="stopStress()">⏹ Stop Stress Mode</button>
+            </div>
+        </div>
+
+        <!-- ACTIVITY FEED -->
+        <div class="card">
+            <div class="card-head"><span class="card-title">Activity Feed</span><span id="feedCount" class="tag muted">0
+                    events</span></div>
+            <div class="feed" id="feed">
+                <div class="entry info">Connect to server to start testing.</div>
+            </div>
+            <div class="card-title" style="margin-top:12px;font-size:.72rem;color:var(--muted)">Last Response Payload
+            </div>
+            <div class="payload" id="payload">No request yet.</div>
+        </div>
+
+    </div>
+
+    <script>
+        const CLIENT_KEY = 'ng_client_id';
+        const clientId = localStorage.getItem(CLIENT_KEY) || 'cli_' + Math.random().toString(36).slice(2, 10);
+        localStorage.setItem(CLIENT_KEY, clientId);
+        document.getElementById('cidBox').textContent = clientId;
+
+        let connected = false, busy = false, stressRunning = false, stressTimer = null, feedCount = 0;
+        const allTaskBtns = [...document.querySelectorAll('.task-btn,.stress-btn')];
+
+        function setConnected(v, msg) {
+            connected = v;
+            document.getElementById('dot').className = 'dot' + (v ? ' on' : '');
+            document.getElementById('connBtn').className = 'main-btn' + (v ? ' disc' : '');
+            document.getElementById('connBtn').textContent = v ? 'Disconnect from Server' : 'Connect to Server';
+            document.getElementById('connTag').textContent = v ? 'Connected' : 'Disconnected';
+            document.getElementById('connTag').className = 'tag ' + (v ? 'green' : 'muted');
+            document.getElementById('statusBox').textContent = msg;
+            document.getElementById('demoBtn').disabled = !v;
+            refreshBtns();
+        }
+        function setBusy(v, label = 'Idle') {
+            busy = v;
+            document.getElementById('connBtn').disabled = v;
+            document.getElementById('taskTag').textContent = label;
+            document.getElementById('taskTag').className = 'tag ' + (v ? 'yellow' : 'muted');
+            refreshBtns();
+        }
+        function refreshBtns() { allTaskBtns.forEach(b => b.disabled = !connected || busy) }
+
+        function addFeed(msg, tone = 'info') {
+            feedCount++;
+            document.getElementById('feedCount').textContent = feedCount + ' event' + (feedCount !== 1 ? 's' : '');
+            const el = document.createElement('div');
+            el.className = 'entry ' + tone;
+            el.textContent = new Date().toLocaleTimeString() + ' · ' + msg;
+            const feed = document.getElementById('feed');
+            feed.prepend(el);
+            while (feed.children.length > 150) feed.removeChild(feed.lastChild);
+        }
+
+        async function post(url, body) {
+            const r = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+            return { ok: r.ok, status: r.status, data: await r.json() };
+        }
+
+        async function toggleConn() {
+            if (busy) return;
+            setBusy(true, connected ? 'Disconnecting…' : 'Connecting…');
+            try {
+                if (!connected) {
+                    const res = await post('/api/join', { client_id: clientId });
+                    const s = res.data.status;
+                    if (s === 'ok' || s === 'queued') {
+                        setConnected(true, res.data.message || 'Connected');
+                        addFeed('Connected to server — ID: ' + clientId, s === 'queued' ? 'warn' : 'ok');
+                    } else {
+                        setConnected(false, 'Server ' + s + ': ' + (res.data.message || 'Try again'));
+                        addFeed('Connection failed: ' + res.data.message, 'error');
+                    }
+                } else {
+                    await post('/api/leave', { client_id: clientId });
+                    setConnected(false, 'Disconnected');
+                    addFeed('Disconnected from server.', 'info');
+                }
+            } catch (e) { addFeed('Network error: ' + e.message, 'error'); }
+            finally { setBusy(false, 'Idle'); }
+        }
+
+        async function run(task, extra = {}) {
+            if (!connected) return;
+            setBusy(true, task + '…');
+            addFeed('→ Sending: ' + task, 'info');
+            try {
+                const res = await post('/api/task/' + task, { client_id: clientId, ...extra });
+                const d = res.data;
+                document.getElementById('sLat').textContent = (d.latency_ms ?? '—') + ' ms';
+                document.getElementById('sOvl').textContent = d.overload_factor ?? '—';
+                document.getElementById('sStat').textContent = d.status ?? '—';
+                document.getElementById('sTask').textContent = task;
+                document.getElementById('payload').textContent = JSON.stringify(d, null, 2);
+                const tone = d.status === 'ok' ? 'ok' : d.status === 'error' ? 'error' : 'warn';
+                addFeed('← ' + task + ' [' + d.status + '] ' + d.latency_ms + 'ms  ×' + d.overload_factor, tone);
+            } catch (e) { addFeed('Error: ' + e.message, 'error'); }
+            finally { setBusy(false, 'Idle'); }
+        }
+
+        async function bruteForce() {
+            if (!connected || busy) return;
+            stopStress(); stressRunning = true;
+            setBusy(true, 'Brute force…');
+            addFeed('⚠ Brute force: 10 failed logins — watch SecurityAgent on dashboard', 'warn');
+            for (let i = 0; i < 10 && stressRunning; i++) {
+                try {
+                    const res = await post('/api/task/login', { client_id: clientId, success: false });
+                    const d = res.data;
+                    document.getElementById('payload').textContent = JSON.stringify(d, null, 2);
+                    addFeed('  [' + (i + 1) + '/10] failed login — ' + d.latency_ms + 'ms', 'warn');
+                } catch { break; }
+            }
+            addFeed('Brute force complete — SecurityAgent should be activated on dashboard', 'warn');
+            stressRunning = false; setBusy(false, 'Idle');
+        }
+
+        /* ===========================
+           FULL DEMO MODE
+        =========================== */
+        const DEMO_SCRIPT = [
+            {
+                label: 'Phase 1: Normal operation', detail: 'Sending heartbeat + login…', fn: async () => {
+                    await runQuiet('heartbeat'); await sleep(800); await runQuiet('login');
+                    addFeed('[Demo] Phase 1: Normal tasks OK', 'demo');
+                }
+            },
+            {
+                label: 'Phase 2: Trigger SecurityAgent', detail: 'Sending 12 failed logins → SecurityAgent…', fn: async () => {
+                    addFeed('[Demo] Sending 12 failed logins to trigger SecurityAgent…', 'demo');
+                    for (let i = 0; i < 12 && stressRunning; i++) {
+                        await runQuiet('login', { success: false }); await sleep(400);
+                    }
+                    addFeed('[Demo] SecurityAgent should activate on dashboard now!', 'demo');
+                    await sleep(4000); // Let AI respond
+                }
+            },
+            {
+                label: 'Phase 3: Trigger PerformanceAgent', detail: 'Heavy compute tasks → CPU/RAM spike…', fn: async () => {
+                    addFeed('[Demo] Heavy tasks: PerformanceAgent monitoring CPU/RAM…', 'demo');
+                    for (let i = 0; i < 5 && stressRunning; i++) {
+                        await runQuiet('compute'); await sleep(200);
+                        await runQuiet('bulk_process'); await sleep(200);
+                        await runQuiet('file_upload'); await sleep(200);
+                    }
+                    addFeed('[Demo] PerformanceAgent should respond to CPU/RAM spike!', 'demo');
+                    await sleep(4000);
+                }
+            },
+            {
+                label: 'Phase 4: Trigger CapacityAgent', detail: 'Simulating server overload via dashboard…', fn: async () => {
+                    addFeed('[Demo] Requesting server overload simulation…', 'demo');
+                    const stateRes = await fetch('/api/state').then(r => r.json());
+                    const cap = stateRes.capacity || {};
+                    const active = Number(cap.active_sessions || 0);
+                    const maxReject = Number(cap.max_reject || 15);
+                    const need = Math.max(3, (maxReject - active) + 1);
+                    await fetch('/api/simulate/overload', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ count: need })
+                    });
+                    addFeed('[Demo] CapacityAgent should detect server degradation!', 'demo');
+                    await sleep(5000);
+                }
+            },
+            {
+                label: 'Phase 5: High latency tasks', detail: 'Stream + db_query for LatencyAgent…', fn: async () => {
+                    addFeed('[Demo] Running high-latency tasks for LatencyAgent…', 'demo');
+                    await fetch('/api/simulate/latency', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ count: 4, latency_ms: 1800 })
+                    });
+                    for (let i = 0; i < 4 && stressRunning; i++) {
+                        await runQuiet('stream'); await sleep(300);
+                        await runQuiet('db_query'); await sleep(300);
+                    }
+                    addFeed('[Demo] LatencyAgent monitors response times!', 'demo');
+                    await sleep(3000);
+                }
+            },
+            {
+                label: 'Complete!', detail: 'Full demo done — check AI Incident Report on dashboard', fn: async () => {
+                    addFeed('✅ Demo complete! Check Admin Dashboard for full AI incident reports.', 'ok');
+                }
+            },
+        ];
+
+        async function runQuiet(task, extra = {}) {
+            try {
+                const res = await post('/api/task/' + task, { client_id: clientId, ...extra });
+                const d = res.data;
+                document.getElementById('sLat').textContent = (d.latency_ms ?? '—') + ' ms';
+                document.getElementById('sOvl').textContent = d.overload_factor ?? '—';
+                document.getElementById('sStat').textContent = d.status ?? '—';
+                document.getElementById('sTask').textContent = task;
+            } catch { }
+        }
+
+        function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+        async function runFullDemo() {
+            if (!connected || busy) return;
+            stopStress(); stressRunning = true;
+            setBusy(true, 'Running Full Demo…');
+            document.getElementById('demoProgress').style.display = 'block';
+            document.getElementById('demoBtn').disabled = true;
+            addFeed('🎓 FULL DEMO MODE STARTED — watch Admin Dashboard!', 'demo');
+
+            const total = DEMO_SCRIPT.length;
+            for (let i = 0; i < total; i++) {
+                if (!stressRunning) break;
+                const step = DEMO_SCRIPT[i];
+                document.getElementById('demoStepLabel').textContent = 'Step ' + (i + 1) + '/' + total + ': ' + step.label;
+                document.getElementById('demoStepDetail').textContent = step.detail;
+                document.getElementById('dpBar').style.width = ((i / total) * 100) + '%';
+                addFeed('[Demo] ' + step.label, 'demo');
+                await step.fn();
+            }
+
+            document.getElementById('dpBar').style.width = '100%';
+            document.getElementById('demoStepLabel').textContent = '✅ Demo Complete!';
+            document.getElementById('demoStepDetail').textContent = 'All 4 agents demonstrated. Check Admin Dashboard.';
+            stressRunning = false; setBusy(false, 'Idle');
+            document.getElementById('demoBtn').disabled = !connected;
+            addFeed('🎓 DEMO DONE — all agents demonstrated, AI Gemini reports on dashboard!', 'ok');
+        }
+
+        const RAPID = [
+            'login', 'db_query', 'search', 'file_download', 'compute', 'login', 'heartbeat',
+            'db_query', 'search', 'file_upload', 'stream', 'db_query', 'compute', 'search',
+            'heartbeat', 'login', 'db_query', 'file_download', 'search', 'compute'
+        ];
+        const MAX = ['bulk_process', 'file_upload', 'compute', 'stream', 'bulk_process', 'file_upload', 'compute', 'stream'];
+        const RAMP = ['heartbeat', 'login', 'db_query', 'search', 'file_download', 'compute', 'stream', 'file_upload', 'bulk_process'];
+
+        async function stressMode(mode) {
+            if (!connected || busy) return;
+            stopStress(); stressRunning = true;
+            if (mode === 'continuous') {
+                addFeed('⏱ Continuous mode started (heartbeat every 1s)', 'info');
+                const tick = async () => {
+                    if (!stressRunning || !connected) return;
+                    try {
+                        const res = await post('/api/task/heartbeat', { client_id: clientId });
+                        addFeed('heartbeat [' + res.data.status + '] ' + res.data.latency_ms + 'ms', 'ok');
+                    } catch { }
+                    if (stressRunning) stressTimer = setTimeout(tick, 1000);
+                }; tick(); return;
+            }
+            const tasks = mode === 'rapid' ? RAPID : mode === 'maxload' ? MAX : RAMP;
+            addFeed('🔥 ' + mode + ' mode: ' + tasks.length + ' tasks queued', 'info');
+            setBusy(true, mode + '…');
+            for (let i = 0; i < tasks.length && stressRunning; i++) {
+                const t = tasks[i];
+                try {
+                    const res = await post('/api/task/' + t, { client_id: clientId });
+                    const d = res.data;
+                    document.getElementById('sLat').textContent = (d.latency_ms ?? '—') + ' ms';
+                    document.getElementById('sOvl').textContent = d.overload_factor ?? '—';
+                    document.getElementById('sStat').textContent = d.status ?? '—';
+                    document.getElementById('sTask').textContent = t;
+                    document.getElementById('payload').textContent = JSON.stringify(d, null, 2);
+                    const tone = d.status === 'ok' ? 'ok' : 'warn';
+                    addFeed('[' + (i + 1) + '/' + tasks.length + '] ' + t + ' [' + d.status + '] ' + d.latency_ms + 'ms ×' + d.overload_factor, tone);
+                    if (mode === 'ramp') await sleep(2000);
+                } catch (e) { addFeed('Error: ' + e.message, 'error'); break; }
+            }
+            addFeed(mode + ' mode complete.', 'info');
+            stressRunning = false; setBusy(false, 'Idle');
+        }
+
+        function stopStress() {
+            stressRunning = false;
+            if (stressTimer) { clearTimeout(stressTimer); stressTimer = null; }
+            if (busy) setBusy(false, 'Idle');
+        }
+
+        function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+        setConnected(false, 'Not connected');
+    </script>
+</body>
+
+</html>
