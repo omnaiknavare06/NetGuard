@@ -523,7 +523,7 @@ Recommended Production Features:
 
 ### Admin Dashboard
 
-![Admin Dashboard](screenshots/dashboard.png)
+![Admin Dashboard](netguard/screenshots/dashboard.png)
 
 *Real-time monitoring dashboard with live metrics and alerts.*
 
@@ -531,7 +531,7 @@ Recommended Production Features:
 
 ### Client Simulator
 
-![Client Simulator](screenshots/client-simulator.png)
+![Client Simulator](netguard/screenshots/client-simulator.png)
 
 *Interactive interface for generating network workloads.*
 
@@ -539,7 +539,7 @@ Recommended Production Features:
 
 ### Incident Analysis
 
-![Incident Analysis](screenshots/incident-analysis.png)
+![Incident Analysis](netguard/screenshots/incident-analysis.png)
 
 *AI-generated root cause analysis and recommendations.*
 
@@ -547,7 +547,7 @@ Recommended Production Features:
 
 ### Live Logs
 
-![Live Logs](screenshots/live-logs.png)
+![Live Logs](netguard/screenshots/live-logs.png)
 
 *Real-time event stream and monitoring logs.*
 
